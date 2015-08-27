@@ -1,0 +1,158 @@
+body{
+	/*background: #000000 url(images/fondo1.jpg);*/
+}
+/*
+ul { list-style-type: none; margin: 0; padding: 0; margin-bottom: 10px; }
+
+li { margin: 1px; padding: 1px; width: 98%; }
+*/
+.contadores{
+	margin: 1px; padding: 1px; width: 98%;
+}
+
+.textColor{
+	color: black;
+}
+.mapGral {
+        height: 500px;
+        width:100%;
+        margin: 0px;
+        padding: 0px
+}
+
+.listNodes{
+	height: 300px;	
+}
+
+/****************************************************************/
+/* Style for overlay and box */
+.tTops{
+	height: 200px;	
+}
+.overlay{
+  background:transparent url(images/overlay.png) repeat top left;
+  position:fixed;
+  top:0px;
+  bottom:0px;
+  left:0px;
+  right:0px;
+  z-index:100;
+}
+.box{
+  position:fixed;
+  top:-2500px;
+  left:10%;
+  right:10%;
+  color:#7F7F7F;
+  -moz-border-radius: 20px;
+  -webkit-border-radius:20px;
+  -khtml-border-radius:20px;
+  -moz-box-shadow: 0 1px 5px #333;
+  -webkit-box-shadow: 0 1px 5px #333;
+  z-index:9999;
+}
+
+/*.box h1{*/
+.page-header_title{
+  border-bottom: 1px dashed #7F7F7F;
+  /*border-bottom: 1px solid #EEEEEE;*/
+  margin:-0px -0px 0px -0px;
+  padding:10px;
+  background-color:#202020;
+  color:#c9e4db;
+  -moz-border-radius:20px 20px 0px 0px;
+  -webkit-border-top-left-radius: 20px;
+  -webkit-border-top-right-radius: 20px;
+  -khtml-border-top-left-radius: 20px;
+  -khtml-border-top-right-radius: 20px;
+  font: 14px Verdana;
+  text-align: center;
+}
+
+.box act {
+  border-bottom: 1px dashed #7F7F7F;
+  margin:-20px -20px 0px -20px;
+  padding:100px;
+  background-color:#FFEFEF;
+  color:#EF7777;
+  -moz-border-radius:20px 20px 0px 0px;
+  -webkit-border-top-left-radius: 20px;
+  -webkit-border-top-right-radius: 20px;
+  -khtml-border-top-left-radius: 20px;
+  -khtml-border-top-right-radius: 20px;
+}
+
+a.boxclose{
+  float:right;
+  top:-2500px;
+  width:26px;
+  height:26px;
+  background:transparent url(images/cancel.png) repeat top left;
+  margin-top:-30px;
+  margin-right:0px;
+  cursor:pointer;
+}
+
+/*****************************************************************/
+.tree {
+    min-height:20px;
+    padding:19px;
+    margin-bottom:20px;
+    border:1px solid #999;
+    webkit-border-radius:4px;
+    -moz-border-radius:4px;
+    border-radius:4px;
+    -webkit-box-shadow:inset 0 1px 1px rgba(0, 0, 0, 0.05);
+    -moz-box-shadow:inset 0 1px 1px rgba(0, 0, 0, 0.05);
+    box-shadow:inset 0 1px 1px rgba(0, 0, 0, 0.05)
+}
+
+.tree li {
+    list-style-type:none;
+    margin:0;
+    padding:10px 5px 0 5px;
+    position:relative
+}
+.tree li::before, .tree li::after {
+    content:'';
+    left:-20px;
+    position:absolute;
+    right:auto
+}
+
+.tree li::before {
+    border-left:1px solid #999;
+    bottom:50px;
+    height:100%;
+    top:0;
+    width:1px
+}
+.tree li::after {
+    border-top:1px solid #999;
+    height:20px;
+    top:25px;
+    width:25px
+}
+.tree li span {
+    -moz-border-radius:5px;
+    -webkit-border-radius:5px;
+    border:1px solid #999;
+    border-radius:5px;
+    display:inline-block;
+    padding:3px 8px;
+    text-decoration:none
+}
+.tree li.parent_li>span {
+    cursor:pointer
+}
+.tree>ul>li::before, .tree>ul>li::after {
+    border:0
+}
+.tree li:last-child::before {
+    height:30px
+}
+.tree li.parent_li>span:hover, .tree li.parent_li>span:hover+ul li span {
+    /*background:#eee;*/
+    border:1px solid #94a0b4;
+    color:#000
+}

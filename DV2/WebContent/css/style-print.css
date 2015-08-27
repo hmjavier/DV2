@@ -1,0 +1,34 @@
+@CHARSET "UTF-8";
+
+ul.barra-menu {
+	display: none;
+}
+
+a.leermas.imprimir {
+	display: none;
+}
+
+.fichaRecursoImprime{
+	margin-top: 15%;	
+}
+
+.cidOrigenImprime{
+	margin-top: 20%;
+}
+
+div#fichaRecursoImprime{
+	margin-top: 15%;	
+}
+
+div#cidOrigenImprime{
+	margin-top: 30%;
+}
+
+.contenedor-portada{
+	display: block;
+	display: inline-table;
+}
+
+div#contenedor-mapa{
+	margin-top: 1100px;
+}

@@ -1,0 +1,41 @@
+{
+	"reports": {
+		"report": [
+			{
+				"id": "CSC",
+				"to": "serv-campo@reduno.com.mx",
+				"cc": ""
+			},
+			{
+				"id": "GFC",
+				"to": "gfcorporativo@reduno.com.mx",
+				"cc": ""
+			},
+			{
+				"id": "CNOC NOTI",
+				"to": "cnocnoti@reduno.com.mx",
+				"cc": ""
+			},
+			{
+				"id": "ESCALACION CASE",
+				"to": "",
+				"cc": ""
+			},
+			{
+				"id": "SMS-INT",
+				"to": "sms@cfg1.uninet.net.mx",
+				"cc": ""
+			},
+			{
+				"id": "SMS-CLIE",
+				"to": "sms@cfg1.uninet.net.mx",
+				"cc": ""
+			},
+			{
+				"id": "Teldat",
+				"to": "1. Technicial Assistance Center México,tacmexico@teldat.com;2. Gerente TAC México,fguzman@teldat.com;3. Gerente de Operaciones TELDAT,lrodriguez@teldat.com;4. Director TELDAT México,wvives@teldat.com",
+				"cc": "supervision.cnoc@reduno.com.mx"
+			}
+		]
+	}
+}
