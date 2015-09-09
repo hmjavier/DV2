@@ -4,8 +4,8 @@
  */
 
 var drawElementsPerformance = {
-		dataChartPerformance : [],
-		dataChartPerformanceUtil : [],
+		dataChartPerformance : [],		
+		dataChartPerformanceUtil : [],		
 		nodePerformance : "",
 		nmis : "",
 		idResourceInterfaz: "",
@@ -335,46 +335,6 @@ var drawElementsPerformance = {
 				drawElementsPerformance.drawInterfaceQos(classQos);
 				
 			});
-		},drawChartResponse:function(){
-			drawElementsPerformance.chartIdPerformance = "1";
-			drawElementsPerformance.subtitlePerformance = "";
-			drawElementsPerformance.metricUnit = "";
-			drawElementsPerformance.dataChartPerformance.length = 0;
-			drawElementsPerformance.subtitlePerformance = "Response Time ";
-			drawElementsPerformance.metricUnit = "ms";
-			var response = {"jsonRequest":'{"model":"nmis_graph","model_view":"graph","parameters":{"'+drawElementsPerformance.endUnix+'":"'+drawElementsPerformance.endDate+'","end_date_raw":'+drawElementsPerformance.endUnix+',"start_date_raw":'+drawElementsPerformance.startDate+',"graph_type":"response","node":"'+drawElementsPerformance.nodePerformance+'","translation":"","field":""}}',"ip":drawElementsPerformance.nmis};
-
-			drawElementsPerformance.drawChartsPerformance(cnocConnector.service1, response, "containerChartPerformance", "response", "#0C66ED", false);
-		},drawChartUpsOutVolt:function(){
-			drawElementsPerformance.chartIdPerformance = "1";
-			drawElementsPerformance.subtitlePerformance = "";
-			drawElementsPerformance.metricUnit = "";
-			drawElementsPerformance.dataChartPerformance.length = 0;
-			drawElementsPerformance.subtitlePerformance = "Voltage ";
-			drawElementsPerformance.metricUnit = "Volt";
-			var upsvoltout = {"jsonRequest":'{"model":"nmis_graph","model_view":"graph","parameters":{"'+drawElementsPerformance.endUnix+'":"'+drawElementsPerformance.endDate+'","end_date_raw":'+drawElementsPerformance.endUnix+',"start_date_raw":'+drawElementsPerformance.startDate+',"graph_type":"upsvoltout","node":"'+drawElementsPerformance.nodePerformance+'","translation":"","field":""}}',"ip":drawElementsPerformance.nmis};
-			
-			drawElementsPerformance.drawChartsPerformance(cnocConnector.service1, upsvoltout, "containerChartPerformance", "upsvoltout", "#0C66ED", false);
-		},drawChartUpsInVolt:function(){
-			drawElementsPerformance.chartIdPerformance = "1";
-			drawElementsPerformance.subtitlePerformance = "";
-			drawElementsPerformance.metricUnit = "";
-			drawElementsPerformance.dataChartPerformance.length = 0;
-			drawElementsPerformance.subtitlePerformance = "Voltage ";
-			drawElementsPerformance.metricUnit = "Volt";
-			var upsvoltin = {"jsonRequest":'{"model":"nmis_graph","model_view":"graph","parameters":{"'+drawElementsPerformance.endUnix+'":"'+drawElementsPerformance.endDate+'","end_date_raw":'+drawElementsPerformance.endUnix+',"start_date_raw":'+drawElementsPerformance.startDate+',"graph_type":"upsvoltin","node":"'+drawElementsPerformance.nodePerformance+'","translation":"","field":""}}',"ip":drawElementsPerformance.nmis};
-			
-			drawElementsPerformance.drawChartsPerformance(cnocConnector.service1, upsvoltin, "containerChartPerformance", "upsvoltin", "#0C66ED", false);
-		},drawChartUpsBatRemaing:function(){
-			drawElementsPerformance.chartIdPerformance = "1";
-			drawElementsPerformance.subtitlePerformance = "";
-			drawElementsPerformance.metricUnit = "";
-			drawElementsPerformance.dataChartPerformance.length = 0;
-			drawElementsPerformance.subtitlePerformance = "Battery Remaing";
-			drawElementsPerformance.metricUnit = "";
-			var batteryRemaing = {"jsonRequest":'{"model":"nmis_rrd","model_view":"graph","parameters":{"'+drawElementsPerformance.endUnix+'":"'+drawElementsPerformance.endDate+'","end_date_raw":'+drawElementsPerformance.endUnix+',"start_date_raw":'+drawElementsPerformance.startDate+',"graph_type":"batcharremain","node":"'+drawElementsPerformance.nodePerformance+'","translation":"","field":"UpsBatteryRemaing"}}',"ip":drawElementsPerformance.nmis};
-			
-			drawElementsPerformance.drawChartsPerformance(cnocConnector.service1, batteryRemaing, "containerChartPerformance", "batteryRemaing", "#0C66ED", false);
 		},drawChartHealth:function(){
 			
 			drawElementsPerformance.chartIdPerformance = "1";
@@ -388,7 +348,7 @@ var drawElementsPerformance = {
 			drawElementsPerformance.drawChartsPerformance(cnocConnector.service1, availability, "containerChartPerformance", "availability", "#0C66ED", false);
 			
 		},drawChartCPU: function(){
-			drawElementsPerformance.chartIdPerformance = "1";
+			drawElementsPerformance.chartIdPerformance = "2";
 			drawElementsPerformance.subtitlePerformance = "";
 			drawElementsPerformance.metricUnit = "";
 			drawElementsPerformance.dataChartPerformance.length = 0;
@@ -401,7 +361,7 @@ var drawElementsPerformance = {
 			drawElementsPerformance.drawChartsPerformance(cnocConnector.service1, avgBusy5, "containerChartPerformance", "avgBusy5","#2BC70D", false);	
 			
 		},drawChartHealtRT: function(){
-			drawElementsPerformance.chartIdPerformance = "1";
+			drawElementsPerformance.chartIdPerformance = "3";
 			drawElementsPerformance.subtitlePerformance = "";
 			drawElementsPerformance.metricUnit = "";
 			drawElementsPerformance.dataChartPerformance.length = 0;
@@ -411,8 +371,22 @@ var drawElementsPerformance = {
 			
 			drawElementsPerformance.drawChartsPerformance(cnocConnector.service1, responsetime, "containerChartPerformance", "Response Time", "#0C66ED", false);
 			
+		},drawChartMemoryProc: function(){
+			
+			drawElementsPerformance.chartIdPerformance = "4";
+			drawElementsPerformance.subtitlePerformance = "";
+			drawElementsPerformance.metricUnit = "";
+			drawElementsPerformance.dataChartPerformance.length = 0;
+			drawElementsPerformance.subtitlePerformance = "Mem Util PROC";
+			drawElementsPerformance.metricUnit = " ";
+			var MemoryFreePROC = {"jsonRequest":'{"model":"nmis_rrd","model_view":"graph","parameters":{"'+drawElementsPerformance.endUnix+'":"'+drawElementsPerformance.endDate+'","end_date_raw":'+drawElementsPerformance.endUnix+',"start_date_raw":'+drawElementsPerformance.startDate+',"graph_type":"nodehealth","node":"'+drawElementsPerformance.nodePerformance+'","translation":"","field":"MemoryFreePROC"}}',"ip":drawElementsPerformance.nmis};
+			var MemoryUsedPROC = {"jsonRequest":'{"model":"nmis_rrd","model_view":"graph","parameters":{"'+drawElementsPerformance.endUnix+'":"'+drawElementsPerformance.endDate+'","end_date_raw":'+drawElementsPerformance.endUnix+',"start_date_raw":'+drawElementsPerformance.startDate+',"graph_type":"nodehealth","node":"'+drawElementsPerformance.nodePerformance+'","translation":"","field":"MemoryUsedPROC"}}',"ip":drawElementsPerformance.nmis};
+			
+			drawElementsPerformance.drawChartsPerformance(cnocConnector.service1, MemoryFreePROC, "containerChartPerformance", "MemoryFreePROC", "#0C66ED", false);
+			drawElementsPerformance.drawChartsPerformance(cnocConnector.service1, MemoryUsedPROC, "containerChartPerformance", "MemoryUsedPROC","#2BC70D", false);
+			
 		},drawChartMemoryIO: function(){
-			drawElementsPerformance.chartIdPerformance = "2";
+			drawElementsPerformance.chartIdPerformance = "5";
 			drawElementsPerformance.subtitlePerformance = "";
 			drawElementsPerformance.idResourceInterfaz = "";
 			drawElementsPerformance.metricUnit = " ";
@@ -425,22 +399,8 @@ var drawElementsPerformance = {
 			drawElementsPerformance.drawChartsPerformance(cnocConnector.service1, MemoryFreeIO, "containerChartPerformance", "MemoryFreeIO", "#0C66ED", false);
 			drawElementsPerformance.drawChartsPerformance(cnocConnector.service1, MemoryUsedIO, "containerChartPerformance", "MemoryUsedIO","#2BC70D", false);
 		
-		},drawChartMemoryProc: function(){
-			
-			drawElementsPerformance.chartIdPerformance = "3";
-			drawElementsPerformance.subtitlePerformance = "";
-			drawElementsPerformance.metricUnit = "";
-			drawElementsPerformance.dataChartPerformance.length = 0;
-			drawElementsPerformance.subtitlePerformance = "Mem Util PROC";
-			drawElementsPerformance.metricUnit = " ";
-			var MemoryFreePROC = {"jsonRequest":'{"model":"nmis_rrd","model_view":"graph","parameters":{"'+drawElementsPerformance.endUnix+'":"'+drawElementsPerformance.endDate+'","end_date_raw":'+drawElementsPerformance.endUnix+',"start_date_raw":'+drawElementsPerformance.startDate+',"graph_type":"nodehealth","node":"'+drawElementsPerformance.nodePerformance+'","translation":"","field":"MemoryFreePROC"}}',"ip":drawElementsPerformance.nmis};
-			var MemoryUsedPROC = {"jsonRequest":'{"model":"nmis_rrd","model_view":"graph","parameters":{"'+drawElementsPerformance.endUnix+'":"'+drawElementsPerformance.endDate+'","end_date_raw":'+drawElementsPerformance.endUnix+',"start_date_raw":'+drawElementsPerformance.startDate+',"graph_type":"nodehealth","node":"'+drawElementsPerformance.nodePerformance+'","translation":"","field":"MemoryUsedPROC"}}',"ip":drawElementsPerformance.nmis};
-			
-			drawElementsPerformance.drawChartsPerformance(cnocConnector.service1, MemoryFreePROC, "containerChartPerformance", "MemoryFreePROC", "#0C66ED", false);
-			drawElementsPerformance.drawChartsPerformance(cnocConnector.service1, MemoryUsedPROC, "containerChartPerformance", "MemoryUsedPROC","#2BC70D", false);
-			
 		},drawInterfaceUtil: function(unidad, divId){		
-			drawElementsPerformance.chartIdPerformance = "4";
+			drawElementsPerformance.chartIdPerformance = "6";
 			drawElementsPerformance.subtitlePerformance = "";
 			drawElementsPerformance.dataChartPerformance.length = 0;
 			drawElementsPerformance.metricUnit = "";
@@ -463,7 +423,7 @@ var drawElementsPerformance = {
 			
 
 		},drawInterfaceErrors: function(){
-			drawElementsPerformance.chartIdPerformance = "5";
+			drawElementsPerformance.chartIdPerformance = "7";
 			drawElementsPerformance.subtitlePerformance = "";
 			drawElementsPerformance.dataChartPerformance.length = 0;
 			drawElementsPerformance.metricUnit = "";
@@ -474,7 +434,7 @@ var drawElementsPerformance = {
 			drawElementsPerformance.drawChartsPerformance(cnocConnector.service1, errpkts_hc, "containerChartPerformance", "errpkts_hc",null, true);
 
 		},drawInterfacePkts: function(){
-			drawElementsPerformance.chartIdPerformance = "6";
+			drawElementsPerformance.chartIdPerformance = "8";
 			drawElementsPerformance.subtitlePerformance = "";
 			drawElementsPerformance.dataChartPerformance.length = 0;
 			drawElementsPerformance.metricUnit = "";
@@ -485,7 +445,7 @@ var drawElementsPerformance = {
 			drawElementsPerformance.drawChartsPerformance(cnocConnector.service1, pkts_hc, "containerChartPerformance", "pkts_hc",null, true);
 		
 		},drawInterfaceQos: function(classQos){
-			drawElementsPerformance.chartIdPerformance = "7";
+			drawElementsPerformance.chartIdPerformance = "9";
 			drawElementsPerformance.dataChartPerformance.length = 0;
 			drawElementsPerformance.metricUnit = "Avg Bits Per Second";
 			var DropByteOut = {"jsonRequest":'{"model":"nmis_rrd","model_view":"graph","parameters":{"'+drawElementsPerformance.endUnix+'":"'+drawElementsPerformance.endDate+'","end_date_raw":'+drawElementsPerformance.endUnix+',"start_date_raw":'+drawElementsPerformance.startDate+',"graph_type":"cbqos-out","index_graph_type": "cbqos-out","resource_index": "'+drawElementsPerformance.idResourceInterfaz+'","node":"'+drawElementsPerformance.nodePerformance+'","translation":"","field":"DropByte","item":"'+classQos+'"}}',"ip":drawElementsPerformance.nmis};			
@@ -510,7 +470,7 @@ var drawElementsPerformance = {
 			drawElementsPerformance.drawChartsPerformance(cnocConnector.service1, qos, "containerChartPerformance", "QosHuawei",null, true);
 			
 		},drawChartCPUHuawei: function(){
-			drawElementsPerformance.chartIdPerformance = "8";
+			drawElementsPerformance.chartIdPerformance = "";
 			drawElementsPerformance.subtitlePerformance = "";
 			drawElementsPerformance.metricUnit = "";
 			drawElementsPerformance.dataChartPerformance.length = 0;
@@ -522,7 +482,7 @@ var drawElementsPerformance = {
 
 			
 		},drawChartMemHuawei: function(){
-			drawElementsPerformance.chartIdPerformance = "9";
+			drawElementsPerformance.chartIdPerformance = "";
 			drawElementsPerformance.subtitlePerformance = "";
 			drawElementsPerformance.metricUnit = "";
 			drawElementsPerformance.dataChartPerformance.length = 0;
@@ -533,8 +493,48 @@ var drawElementsPerformance = {
 			drawElementsPerformance.drawChartsPerformance(cnocConnector.service1, memoryH, "containerChartPerformance", "memoryH", "#0C66ED", false);
 
 			
-		},drawChartsPerformance: function(url, params, container, labelMetric, color, otherMetrics){
+		},drawChartResponse:function(){
+			drawElementsPerformance.chartIdPerformance = "";
+			drawElementsPerformance.subtitlePerformance = "";
+			drawElementsPerformance.metricUnit = "";
+			drawElementsPerformance.dataChartPerformance.length = 0;
+			drawElementsPerformance.subtitlePerformance = "Response Time ";
+			drawElementsPerformance.metricUnit = "ms";
+			var response = {"jsonRequest":'{"model":"nmis_graph","model_view":"graph","parameters":{"'+drawElementsPerformance.endUnix+'":"'+drawElementsPerformance.endDate+'","end_date_raw":'+drawElementsPerformance.endUnix+',"start_date_raw":'+drawElementsPerformance.startDate+',"graph_type":"response","node":"'+drawElementsPerformance.nodePerformance+'","translation":"","field":""}}',"ip":drawElementsPerformance.nmis};
+
+			drawElementsPerformance.drawChartsPerformance(cnocConnector.service1, response, "containerChartPerformance", "response", "#0C66ED", false);
+		},drawChartUpsOutVolt:function(){
+			drawElementsPerformance.chartIdPerformance = "";
+			drawElementsPerformance.subtitlePerformance = "";
+			drawElementsPerformance.metricUnit = "";
+			drawElementsPerformance.dataChartPerformance.length = 0;
+			drawElementsPerformance.subtitlePerformance = "Voltage ";
+			drawElementsPerformance.metricUnit = "Volt";
+			var upsvoltout = {"jsonRequest":'{"model":"nmis_graph","model_view":"graph","parameters":{"'+drawElementsPerformance.endUnix+'":"'+drawElementsPerformance.endDate+'","end_date_raw":'+drawElementsPerformance.endUnix+',"start_date_raw":'+drawElementsPerformance.startDate+',"graph_type":"upsvoltout","node":"'+drawElementsPerformance.nodePerformance+'","translation":"","field":""}}',"ip":drawElementsPerformance.nmis};
 			
+			drawElementsPerformance.drawChartsPerformance(cnocConnector.service1, upsvoltout, "containerChartPerformance", "upsvoltout", "#0C66ED", false);
+		},drawChartUpsInVolt:function(){
+			drawElementsPerformance.chartIdPerformance = "";
+			drawElementsPerformance.subtitlePerformance = "";
+			drawElementsPerformance.metricUnit = "";
+			drawElementsPerformance.dataChartPerformance.length = 0;
+			drawElementsPerformance.subtitlePerformance = "Voltage ";
+			drawElementsPerformance.metricUnit = "Volt";
+			var upsvoltin = {"jsonRequest":'{"model":"nmis_graph","model_view":"graph","parameters":{"'+drawElementsPerformance.endUnix+'":"'+drawElementsPerformance.endDate+'","end_date_raw":'+drawElementsPerformance.endUnix+',"start_date_raw":'+drawElementsPerformance.startDate+',"graph_type":"upsvoltin","node":"'+drawElementsPerformance.nodePerformance+'","translation":"","field":""}}',"ip":drawElementsPerformance.nmis};
+			
+			drawElementsPerformance.drawChartsPerformance(cnocConnector.service1, upsvoltin, "containerChartPerformance", "upsvoltin", "#0C66ED", false);
+		},drawChartUpsBatRemaing:function(){
+			drawElementsPerformance.chartIdPerformance = "";
+			drawElementsPerformance.subtitlePerformance = "";
+			drawElementsPerformance.metricUnit = "";
+			drawElementsPerformance.dataChartPerformance.length = 0;
+			drawElementsPerformance.subtitlePerformance = "Battery Remaing";
+			drawElementsPerformance.metricUnit = "";
+			var batteryRemaing = {"jsonRequest":'{"model":"nmis_rrd","model_view":"graph","parameters":{"'+drawElementsPerformance.endUnix+'":"'+drawElementsPerformance.endDate+'","end_date_raw":'+drawElementsPerformance.endUnix+',"start_date_raw":'+drawElementsPerformance.startDate+',"graph_type":"batcharremain","node":"'+drawElementsPerformance.nodePerformance+'","translation":"","field":"UpsBatteryRemaing"}}',"ip":drawElementsPerformance.nmis};
+			
+			drawElementsPerformance.drawChartsPerformance(cnocConnector.service1, batteryRemaing, "containerChartPerformance", "batteryRemaing", "#0C66ED", false);
+		},drawChartsPerformance: function(url, params, container, labelMetric, color, otherMetrics){
+
 			$( "#" + container ).mask("Waiting...");
 			
 			
@@ -573,7 +573,24 @@ var drawElementsPerformance = {
 	   						onDataReceived(dataChart);
 	   					}
 	   				}else{
-	   					dataChart = {color:color, name:labelMetric, data: response.replyData.data[0].data};
+	   					if(labelMetric === "DropByte-Out" || labelMetric === "PrePolicyByte-Out" || labelMetric === "DropByte-In" || labelMetric === "PrePolicyByte-In"){
+		   					var data = [];		   					
+		   					$.each( response.replyData.data[0].data, function( index, value ){
+		   						var dataTmp = [];
+		   						$.each( value, function( index, value ){	   
+		   							if(index === 1){
+		   								dataTmp.push(value * 8);
+		   							}else{
+		   								dataTmp.push(value);
+		   							}	   							
+		   						});
+		   						data.push(dataTmp);	   						
+		   					});
+		   					dataChart = {color:color, name:labelMetric, data: data};
+	   					}else{
+	   						dataChart = {color:color, name:labelMetric, data: response.replyData.data[0].data};
+	   					}
+	   					
 	   					onDataReceived(dataChart);
 	   				}
 	   			}
@@ -588,24 +605,49 @@ var drawElementsPerformance = {
 			drawElementsPerformance.endUnix = endDate;
 			drawElementsPerformance.endDate = "";
 			drawElementsPerformance.startDate = startDate;
+
+		},timeChartOp:function(timeOption, container){
+						
+			var timeOp = timeOption * 3600;
+			console.log(timeOp);
 			
-			if(drawElementsPerformance.chartIdPerformance === "1"){
-				drawElementsPerformance.drawChartCPU();
-			}else if(drawElementsPerformance.chartIdPerformance === "2"){
-				drawElementsPerformance.drawChartMemoryIO();
-			}else if(drawElementsPerformance.chartIdPerformance === "3"){
-				drawElementsPerformance.drawChartMemoryProc();
-			}else if(drawElementsPerformance.chartIdPerformance === "4"){
-				drawElementsPerformance.drawInterfaceUtil("autil","");
-			}else if(drawElementsPerformance.chartIdPerformance === "5"){
-				drawElementsPerformance.drawInterfaceErrors();
-			}else if(drawElementsPerformance.chartIdPerformance === "6"){
-				drawElementsPerformance.drawInterfacePkts();
-			}else if(drawElementsPerformance.chartIdPerformance === "7"){
-				drawElementsPerformance.drawInterfaceQos();
-			}else if(drawElementsPerformance.chartIdPerformance === "8"){
-				//drawElementsPerformance.drawInterfaceQos();
+			
+			var endDate = new Date().getTime() / 1000 | 0;
+			var startDate = endDate - timeOp;
+			
+			//var startDate = ((new Date().getTime()).toString()).substring(0,10) - timeOption;
+			//var endDate = ((new Date().getTime()).toString()).substring(0,10);
+			
+			
+			drawElementsPerformance.dataChartPerformanceUtil.length = 0;
+			drawElementsPerformance.endUnix = endDate;
+			drawElementsPerformance.endDate = "";
+			drawElementsPerformance.startDate = startDate;
+			
+			if(container === "containerChartPerformanceInterfaz"){
+				drawElementsPerformance.drawInterfaceUtil("autil",container); // falta ver lo de unidad, divId
+			}else{
+				if(drawElementsPerformance.chartIdPerformance === "1"){
+					drawElementsPerformance.drawChartHealth();
+				}else if(drawElementsPerformance.chartIdPerformance === "2"){
+					drawElementsPerformance.drawChartCPU();
+				}else if(drawElementsPerformance.chartIdPerformance === "3"){
+					drawElementsPerformance.drawChartHealtRT();
+				}else if(drawElementsPerformance.chartIdPerformance === "4"){
+					drawElementsPerformance.drawChartMemoryProc();
+				}else if(drawElementsPerformance.chartIdPerformance === "5"){
+					drawElementsPerformance.drawChartMemoryIO();
+				}else if(drawElementsPerformance.chartIdPerformance === "6"){
+					drawElementsPerformance.drawInterfaceUtil("autil","containerChartPerformance"); // falta ver lo de unidad, divId
+				}else if(drawElementsPerformance.chartIdPerformance === "7"){
+					drawElementsPerformance.drawInterfaceErrors();
+				}else if(drawElementsPerformance.chartIdPerformance === "8"){
+					drawElementsPerformance.drawInterfacePkts();
+				}else if(drawElementsPerformance.chartIdPerformance === "9"){
+					drawElementsPerformance.drawInterfaceQos(); // falta ver lo de classQos
+				}
 			}
+			
 			
 		}		
 };

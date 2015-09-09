@@ -34,12 +34,27 @@ var drawElementsGral = {
 			else
 				this.mapaGeneral(codenet, null ,false);
 			
+			
+			/*** GRUPOS DEL CLIENTE  ***/
+			//cnocConnector.invokeMashup(cnocConnector.service12, {"codenet" : codenet},drawElementsGral.chartGroups, "chartGrupos", "chartGruposG");
+			
 			/*** Getting Node Status ***/
 			drawElementsGral.getNodeStatus(codenet);			
 			
 			cnocConnector.invokeMashup(cnocConnector.service5, {"code_net" : codenet},drawElementsGral.countTotal, "cOpen", "cOpenG");
 			cnocConnector.invokeMashup(cnocConnector.service15, {"code_net" : codenet},drawElementsGral.countTotal, "cIncident", "cIncidentG");						
 
+			
+			/* get Nodes Op flow */
+			cnocFramework.invokeMashup({invokeUrl : endpoint.getListNodesIpFlow,
+				params : {
+					"codenet" : codenet
+					},
+				callback : drawElementsGral.getListNodesIpFlow,
+				divContainers :  [$("#listNodesOpFlow")],
+				divElements : [$("#listNodesOpFlowG")]
+			});
+			
 			/*** Getting Tops Utilization ***/
 			cnocConnector.invokeMashup(
 				cnocConnector.service16,
@@ -62,6 +77,60 @@ var drawElementsGral = {
 				"topOutUtilizationG"
 			);
 		
+		},
+		getListNodesIpFlow: function(datos, divContainers, divElements){
+			console.log("datos opflow");
+			console.log(datos);
+			
+			jQuery(divContainers[0].selector).empty();
+			var tableT = "";
+			try {
+				if (datos.records.record.length > 1) {
+					for ( var i = 0; i < datos.records.record.length; i++) {
+						
+						tableT += "<tr>";
+						tableT += "<td>"+datos.records.record[i].host_name_pyrs.toString()+"</td>";						
+						tableT += "<td><a href='"+datos.records.record[i].ip_publica_opflow.toString()+"' target='_blank'>Op Flow</a></td>";
+						tableT += "</tr>";
+					}
+				} else {
+					tableT += "<tr>";
+					tableT += "<td>"+datos.records.record.host_name_pyrs.toString()+"</td>";						
+					tableT += "<td><a href='"+datos.records.record.ip_publica_opflow.toString()+"' target='_blank'>Op Flow</a></td>";
+					tableT += "</tr>";
+				}
+			} catch (err) {	};
+			
+			var rowsHeaders = [ {
+				"sTitle" : "Node"
+			}, {
+				"sTitle" : "URL"
+			} ];
+			
+			jQuery(divContainers[0].selector).append('<table  style="width:100%;" class="table table-striped table-hover" id="'+ divElements[0].selector.replace("#","") + '">'+tableT+'</table>');
+			
+			dTable = jQuery(divElements[0].selector).dataTable({
+				"sDom": 'T<"clear">lfrtip',
+				"oTableTools": {
+			        "aButtons": [
+			            "copy",
+			            "csv",
+			            "xls"
+			            ]
+			    },
+				//"aaData" : rowsData,
+				"aoColumns" : rowsHeaders,
+				"sScrollX": "100%",
+				"sScrollXInner": "100%",
+				"sScrollY": 220,
+				"bScrollCollapse": true,
+				"bProcessing": true,
+				"bSort": true
+			});
+			
+			//cnocConnector.drawGrid(divContainers[0].selector.replace("#",""), divElements[0].selector.replace("#",""), tableT, rowsHeaders, false);
+			
+			
 		}, 
 		
 		/**
@@ -197,7 +266,7 @@ var drawElementsGral = {
 						drawElementsGral.listNodes('complete');
 						
 						/*** Draw cart Groups ***/
-//						drawElementsGral.chartGroups(drawElementsGral.groups, divElements[5]);
+						drawElementsGral.chartGroups(drawElementsGral.groups, divElements[5]);
 						
 					}
 					
@@ -897,34 +966,19 @@ var drawElementsGral = {
 
 		    return newCoordinates;
 
-		  },chartGroups:function(datos, container, divgroups){
+		  }, chartGroups : function(datos, container) {
 			
 			var categorias = new Array();
 			var unreachable = new Array();
 			var reachable = new Array();
 			var degraded = new Array();
-			var i = 0;
-
-			try {
-				if (datos.records.record.length > 1) {
-					for (i = 0; i < datos.records.record.length; i++) {
-						categorias.push(datos.records.record[i].groups.toString());
-						unreachable.push(parseInt(datos.records.record[i].unreachable.toString()));
-						reachable.push(parseInt(datos.records.record[i].reachable.toString()));
-						degraded.push(parseInt(datos.records.record[i].degraded.toString()));
-					}
-				} else {
-					categorias.push(datos.records.record.groups.toString());
-					unreachable.push(parseInt(datos.records.record.unreachable.toString()));
-					reachable.push(parseInt(datos.records.record.reachable.toString()));
-					degraded.push(parseInt(datos.records.record.degraded.toString()));
-				}
-			} catch (err) {
-				var categorias = new Array();
-				var unreachable = new Array();
-				var reachable = new Array();
-				var degraded = new Array();
-			}
+			
+			$.each(datos, function(k,v) {
+				categorias.push(v.groups.toString());
+				unreachable.push(v.unreachable);
+				reachable.push(v.reachable);
+				degraded.push(v.degraded);
+			});			
 			
 			var totalNodos = [{
 					"name" : "Normal",
@@ -937,8 +991,57 @@ var drawElementsGral = {
 					"data" : degraded,									
 				}];
 
-			var optChart = cnocConnector.drawChartGroups("bar", container, "",totalNodos, categorias);			
-			chart = new Highcharts.Chart(optChart);
+			new Highcharts.Chart({
+				chart : {
+					renderTo : container.selector.substring(1),
+					plotBackgroundColor : null,
+					plotBorderWidth : null,
+					plotShadow : false,
+					type : 'bar'
+				},
+				title : {
+					text : null
+				},
+				credits : {
+					enabled : false
+				},
+				xAxis : {
+					categories : categorias,
+					labels : {
+						style : {
+							fontSize : '8px',
+							fontFamily : 'Verdana, sans-serif'
+						}
+					}
+				},
+				yAxis : {
+					min : 0,
+					title : {
+						text : 'Total Nodes'
+					}
+				},
+				legend : {
+					reversed : true
+				},
+				plotOptions : {
+					series : {
+						stacking : 'normal',
+						events : {
+							click : function(event) {
+								if (event.point.series.name === "Normal") {
+									status = "reachable";
+								} else if (event.point.series.name === "Warning") {
+									status = "degraded";
+								} else if (event.point.series.name === "Critical") {
+									status = "unreachable";
+								}
+							}
+						}
+					},
+					color : [ '#FF0000', '#000000' ]
+				},
+				series : totalNodos
+			});			
 			
 			
 	}, drawListNodes: function (datos, status, container, divTable) {
@@ -1152,7 +1255,7 @@ var drawElementsGral = {
 			$("#" + divTable).delegate("tbody tr", "click", function () {
 					
 					$("#tTops").hide();
-					$("#divContainerTops").show();
+					$("#contenedorChartTops").show();
 					
 					dTable.$('tr.row_selected').removeClass('row_selected');
 					$(this).addClass('row_selected');
@@ -1180,8 +1283,10 @@ var drawElementsGral = {
 						callback : function(response){
 							
 							if(response.records.length == 0){
-								alert("No existe Informacion de TOPS");
-							}else{
+								//alert("No existe Informacion de TOPS");
+								$("#divContainerTops").hide();
+								modelView();
+							}else{								
 								drawElementsGral.getTopOpFlow(response.records.record.host_name_pyrs, response.records.record.ip_lan_opflow);
 							}
 						},
