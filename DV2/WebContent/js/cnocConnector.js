@@ -618,6 +618,9 @@ var cnocConnector = {
 
 		return optChart;
 	},drawChartPerformance:function(series, container, otherMetrics){
+		
+		if(container==="containerChartPerformanceInterfaz"){otherMetrics=false;}
+		
 		$('#'+container).highcharts({
             chart: {
                 type: 'spline',
@@ -690,6 +693,40 @@ var cnocConnector = {
                                         	drawElementsPerformance.drawInterfaceUtil("abits"); 
                                         }
                                     }                            
+                                ]
+                    },
+                    customButton2:
+                    {
+                    	enabled: true,
+                        symbol: 'url(http://cdn1.iconfinder.com/data/icons/fatcow/16/chart_bar.png)',
+                        text: 'Time',
+                        symbolFill: '#B5C9DF',
+                        hoverSymbolFill: '#779ABF',
+                        menuItems: [
+                                    {
+                                        text: '1 Day',
+                                        onclick: function() {
+                                        	drawElementsPerformance.timeChartOp(24,container);
+                                        }
+                                    },
+                                    {
+                                        text: '5 Days',
+                                        onclick: function() {
+                                        	drawElementsPerformance.timeChartOp(120,container);
+                                        }
+                                    },
+                                    {
+                                        text: '15 Days',
+                                        onclick: function() {
+                                        	drawElementsPerformance.timeChartOp(360,container);
+                                        }
+                                    },
+                                    {
+                                        text: '1 Month',
+                                        onclick: function() {
+                                        	drawElementsPerformance.timeChartOp(720,container);
+                                        }
+                                    }
                                 ]
                     }
                 }

@@ -74,24 +74,25 @@
 		</div>
 		<a class="boxclose" id="boxclose"></a>  
 	  <div id="tTops"></div>
-	  
-	  	<div class="divContainerTops" id ="divContainerTops" style="width:96%; margin-left: 1%; overflow: scroll; height: 500px;">
-	  	
-	  	<!--
-	  		<div class="row">
-	  			<div class="col-lg-12">
-				  		<div class="panel panel-primary">
-				    		<div class="panel-heading">
-				    			<a name="nodeList"></a>
-						    	<i class="fa fa-bar-chart-o fa-fw"></i> Chart Utilisation
-						  	</div>
-						  	
-						  	<div class="panel-body" style="height: 400px;">
-						  	<div id="containerChartPerformanceInterfaz"></div>
-						  	</div>
-						</div>
-				  	</div>
-	  		</div>-->
+		
+		<div id="contenedorChartTops" style="overflow: scroll; height: 500px; ">
+			<div class="row divChartUtilisarionBox" id="divChartUtilisarionBox" style="width:96%; margin-left: 1%;">
+	 			<div class="col-lg-12">
+			  		<div class="panel panel-primary">
+			    		<div class="panel-heading">
+			    			<a name="nodeList"></a>
+					    	<i class="fa fa-bar-chart-o fa-fw"></i> Chart Utilisation
+					  	</div>
+					  	
+					  	<div class="panel-body" style="height: 400px;">
+					  	<div id="containerChartPerformanceInterfaz"></div>
+					  	</div>
+					</div>
+			  	</div>
+		  	</div>
+		  	
+		  	<div class="divContainerTops" id ="divContainerTops" style="width:96%; margin-left: 1%;">
+
 			<div class="row">
 			    <div class="col-lg-12">
 			    	<div class="panel panel-primary">
@@ -177,7 +178,8 @@
 			    </div>
 			</div>
 		</div>
-
+		  	
+		</div>
 	</div>
 	<div id="cmd" style="visibility: hidden; height:0px; width: 1000px;">		
 		<div>
@@ -348,14 +350,15 @@
 								  <li class="active"><a data-toggle="tab" href="#topInOPFlow">Utilization IN</a></li>
 								  <li><a data-toggle="tab" href="#topOutOPFlow">Utilization OUT</a></li>
 								  <li><a data-toggle="tab" href="#otherTop">TOPS</a></li>
+								  <li><a data-toggle="tab" href="#chartGrupos">Groups</a></li>
 								</ul>
 								
 								<div class="tab-content">
 								  	<div id="topInOPFlow" class="tab-pane fade in active">						    
-							    		<div id="topInUtilization" style="height: 450px;"></div>
+							    		<div id="topInUtilization" style="height: 490px;"></div>
 							    	</div>
 								  	<div id="topOutOPFlow" class="tab-pane fade">						    
-						    			<div id="topOutUtilization" style="height: 450px;"></div>					    		
+						    			<div id="topOutUtilization" style="height: 490px;"></div>					    		
 							  		</div>
 							  		<div id="otherTop" class="tab-pane fade">						    
 						    			<ul class="nav nav-pills">
@@ -369,10 +372,14 @@
 											<li class="list-group-item contadores topMeasure" id="ifOutDiscardRates"><a href="#">Out Discard Rates</a></li>
 					      				</ul>					    		
 							  		</div>
+							  		
+							    		<div id="chartGrupos" class="tab-pane fade" style="height: 500px;"></div>	
+							  		
 								</div>
 						  	</div>
 						</div>
 				    </div>
+				    				    
 				    <div class="col-lg-5">
 				    	<div class="panel panel-primary" id="mapaAll">
 				    		<div class="panel-heading">
@@ -406,8 +413,28 @@
 					      </ul>
 						  </div>
 						</div>
-						
 						<div class="panel panel-primary">
+				    		<div class="panel-heading">
+				    			<a name="nodeList"></a>
+						    	<i class="fa fa-list-alt fa-fw"></i> Nodes
+						  	</div>
+						  	<!-- <div id="listNodes" class="listNodes"></div>-->
+						  	<div class="panel-body">
+						  		<ul id="tabs" class="nav nav-tabs" data-tabs="tabs">
+							        <li class="active"><a href="#listNodesGral" data-toggle="tab">Node List</a></li>
+							        <li><a href="#listNodesOpFlowGG" data-toggle="tab">List Nodes OpFlow</a></li>
+							    </ul>
+							    <div id="my-tab-content" class="tab-content">
+							        <div class="tab-pane active" id="listNodesGral">
+							            <div id="listNodes" class="listNodes"></div>
+							        </div>
+							        <div class="tab-pane" id="listNodesOpFlowGG">
+							            <div id="listNodesOpFlow" class="listNodesOpFlow"></div>
+							        </div>
+							    </div>
+						  	</div>
+						</div>
+						<!--<div class="panel panel-primary">
 				    		<div class="panel-heading">
 				    			<a name="nodeList"></a>
 						    	<i class="fa fa-list-alt fa-fw"></i> Node List
@@ -415,14 +442,13 @@
 							<div id="listNodes" class="listNodes"></div>
 							<br>
 							<br>
-						</div>
+						</div>-->
 						
 						
 				    </div>
 			  	</div>
 			<!-- /.row -->
-			
-			<br>
+			<!-- 
 				<div class="row">
 					<div class="col-lg-6">
 						<div class="panel panel-primary">
@@ -450,7 +476,7 @@
 						</div>
 				  	</div>
 					
-				</div>
+				</div>-->
 			<!-- /.row -->
 				<br>
 				  <div class="row">
@@ -647,7 +673,7 @@
 									</div>
 									<div class="row" style="padding-left: 7px; padding-right: 7px;">
 										<div class="col-lg-12  form-group has-success">
-								    		<!--<div id="listInterfaces"></div>-->
+								    		<div id="listInterfaces"></div>
 								    		<!-- <div class="panel panel-primary">
 									    		<div class="panel-heading">
 									    			<a name="nodeList"></a>
@@ -854,7 +880,7 @@
 		 	$('.topMeasure').click(function(e) {
 		 		
 		 		$("#tTops").show();
-				$("#divContainerTops").hide();
+				$("#contenedorChartTops").hide();
 		 		
 		 		var currentId = $( this ).attr( 'id' );
 		 		$( '#headerGridsDetailG' ).text("Top " + currentId);
@@ -871,21 +897,21 @@
 			});
 			
 			$('#listIncidentG').click(function(e){
-				$("#divContainerTops").hide();
+				$("#contenedorChartTops").hide();
 				$("#tTops").show();
 				$("#headerGridsDetailG").text("Incident Detail");
 				cnocConnector.invokeMashup(cnocConnector.service18, {"codenet" : cnocConnector.codeNetGlobal},drawElementsGral.detailIncidents, "tTops", "listIncidentG");			
 			});
 			
 			$('#listChangesG').click(function(e){
-				$("#divContainerTops").hide();
+				$("#contenedorChartTops").hide();
 				$("#tTops").show();
 				$("#headerGridsDetailG").text("Change Detail");
 				cnocConnector.invokeMashup(cnocConnector.service27, {"code_net" : cnocConnector.codeNetGlobal,"flag_stat" : "'t'"},drawElementsGral.gridChangesList, "tTops", "changesListTableG");						
 			});
 			
 			$('#relatedIncidents').click(function(e){
-				$("#divContainerTops").hide();
+				$("#contenedorChartTops").hide();
 				$("#tTops").show();
 				$("#headerGridsDetailG").text("Related Tickets");
 				//cnocConnector.invokeMashup(cnocConnector.service18, {"codenet" : cnocConnector.codeNetGlobal},drawElementsGral.detailIncidents, "tTops", "listIncidentG");
@@ -893,7 +919,7 @@
 			});
 			
 			$('#relatedChanges').click(function(e){
-				$("#divContainerTops").hide();
+				$("#contenedorChartTops").hide();
 				$("#tTops").show();
 				$("#headerGridsDetailG").text("Related Chages");
 				//cnocConnector.invokeMashup(cnocConnector.service18, {"codenet" : cnocConnector.codeNetGlobal},drawElementsGral.detailIncidents, "tTops", "listIncidentG");
