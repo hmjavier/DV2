@@ -365,8 +365,76 @@ var drawElementsGral = {
 							cnocFramework.unmask(divContainers);
 						}
 						
-					} else {
-						console.log("response.records.record.length is undefined ");
+					} else { // The variable is undefined
+						
+						console.log("response.records.record.length is undefined");
+						
+						var stopMask = 1;
+						
+						try {
+							/*** Invoke NMIS Nodes by Status ***/
+							cnocFramework.invokeMashup({
+								invokeUrl : endpoint.getDegradedNodes,
+								params : {
+									"ip" : response.records.record.nmisserver.toString(),
+									"query" : '["config.group","' + response.records.record.group.toString() + '","status.nodestatus","' + status +'"]',
+									"properties" : '["node_name","info.status"]'
+								},									
+								callback : function(response, divContainers, divElements) {									
+									
+										$.each(response, function(k,v) { // Loop through Nodes
+											try{
+											// Node properties
+											var node = {
+												'name' : v.node_name.toString(),											
+												'event' : '',
+												'value' : '',
+												'updated': '',
+												'element': ''
+												
+											};
+
+											for (var prop in v.info.status) { // Loop through info.status properties 
+												if (v.info.status[prop].status.toString() != 'ok') {
+													node.event = v.info.status[prop].event;
+													node.value = v.info.status[prop].value;
+													node.updated = drawElementsGral.timeConverter(v.info.status[prop].updated);
+													node.element = v.info.status[prop].element;
+													break;
+												}
+											}
+											
+											// Push nodes
+											drawElementsGral.degradedNodes.push(node);
+											
+											}catch(e){
+												stopMask--;
+												
+											};
+											
+										});
+										
+										if(stopMask == 1) {										
+											
+											//Unmask all div containers 
+											cnocFramework.unmask(divContainers);
+											
+											// Draw complete node list
+											drawElementsGral.drawListNodesDegraded(drawElementsGral.degradedNodes, 'listNodes', 'listNodesG');										
+										}
+										
+										stopMask--;
+								},
+								divContainers : [ $('#listNodes') ],
+								divElements : [ $('#listNodesG') ]
+							});
+							
+						} catch (e) {
+							console.log(e);
+							
+							// Unmask all div containers 
+							cnocFramework.unmask(divContainers);
+						}
 					}				
 				},
 				divContainers : [ ],

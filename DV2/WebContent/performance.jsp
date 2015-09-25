@@ -166,6 +166,7 @@
 	
 	<!-- LIBRERIAS CNOC -->
 	<script src="js/cnocConnector.js"></script>
+	<script src="js/drawElementsGral.js"></script>
 	<script src="js/drawElementsPerformance.js"></script>
 	<script src="js/polygons.js"></script>
 	
