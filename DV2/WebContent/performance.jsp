@@ -166,6 +166,7 @@
 	
 	<!-- LIBRERIAS CNOC -->
 	<script src="js/cnocConnector.js"></script>
+	<script src="js/drawElementsGral.js"></script>
 	<script src="js/drawElementsPerformance.js"></script>
 	<script src="js/polygons.js"></script>
 	
@@ -186,6 +187,9 @@
 		
 	<!-- TREE BOOTSTRAP -->
 	<script src="js/bootstrap-tree.js" /></script>
+	
+	<!-- EXPORT CVS ROWDATA HIGCHARTS -->
+	<script src="js/export-csv.js" /></script>
 		
 	<script type="text/javascript">
 	

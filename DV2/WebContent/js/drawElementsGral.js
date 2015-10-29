@@ -489,8 +489,10 @@ var drawElementsGral = {
 				nodeList = nodeList.concat(drawElementsGral.reachableNodes);
 			
 			} else if (status === 'degraded') { // Draw degraded node list
-//				nodeList = nodeList.concat(drawElementsGral.degradedNodes);
-				drawElementsGral.getNodesByStatus(status, cnocConnector.codeNetGlobal);
+				//nodeList = nodeList.concat(drawElementsGral.degradedNodes);
+				//drawElementsGral.getNodesByStatus(status, cnocConnector.codeNetGlobal);
+				//drawElementsGral.getListNodesDegraded();
+				cnocConnector.invokeMashup(cnocConnector.service14, {"codenet" : cnocConnector.codeNetGlobal,"group":"","status":status},drawElementsGral.drawListNodesV1, "listNodes", "listNodesG");
 			
 			} else if (status === 'unreachable') { // Draw unreachable node list
 				nodeList = nodeList.concat(drawElementsGral.unreachableNodes);
@@ -499,8 +501,109 @@ var drawElementsGral = {
 			drawElementsGral.drawListNodes(nodeList, status, 'listNodes', 'listNodesG');
 			
 		
+		},getListNodesDegraded: function(){
+			
+			/*** Invoke NMIS Nodes by Status ***/
+			cnocFramework.invokeMashup({
+				invokeUrl : endpoint.getDegradedNodesList,
+				params : {
+					"networkCode" : cnocConnector.codeNetGlobal,
+					"flag" : "1"
+				},									
+				callback : drawElementsGral.drawListNodesDegraded,				
+				divContainers : [ $('#listNodes') ],
+				divElements : [ $('#listNodesG') ]
+			});
+			
+			
 		}, drawListNodesDegraded: function (datos, container, divTable) {
-			jQuery("#" + container).empty();	
+			
+			
+			cnocFramework.invokeMashup({
+				invokeUrl : endpoint.getDegradedNodesList,
+				params : {
+					"networkCode" : cnocConnector.codeNetGlobal,
+					"flag" : "2"
+				},									
+				callback : function(datosSnmp, container, divTable){
+					
+					jQuery("#listNodes").empty();	
+					var tableT = "";
+					
+					try {
+							if (datos.records.record.length > 1) {
+								for ( var i = 0; i < datos.records.record.length; i++) {
+									
+									tableT +=
+										"<tr class='warning'>" +
+											"<td><a href='#nodeResource'>"+datos.records.record[i].name.toString()+"</a></td>" +
+											"<td><a href='#nodeResource'>"+datos.records.record[i].event.toString()+"</a></td>" +
+											"<td><a href='#nodeResource'>"+datos.records.record[i].value_column.toString()+"</a></td>" +
+											"<td><a href='#nodeResource'>"+datos.records.record[i].element.toString()+"</a></td>" +						
+											"<td><a href='#nodeResource'>"+datos.records.record[i].updated.toString()+"</a></td>" +
+										"</tr>";
+								}
+							} else {
+								tableT +=
+									"<tr class='warning'>" +
+										"<td><a href='#nodeResource'>"+datos.records.record.name.toString()+"</a></td>" +
+										"<td><a href='#nodeResource'>"+datos.records.record.event.toString()+"</a></td>" +
+										"<td><a href='#nodeResource'>"+datos.records.record.value_column.toString()+"</a></td>" +
+										"<td><a href='#nodeResource'>"+datos.records.record.element.toString()+"</a></td>" +						
+										"<td><a href='#nodeResource'>"+datos.records.record.updated.toString()+"</a></td>" +
+									"</tr>";
+							}
+							
+							/***********************************************************************************************/
+							/*  DATOS SNMP DOWN */
+							
+							if (datosSnmp.records.record.length > 1) {
+								for ( var i = 0; i < datosSnmp.records.record.length; i++) {
+									
+									tableT +=
+										"<tr class='warning'>" +
+											"<td><a href='#nodeResource'>"+datosSnmp.records.record[i].name.toString()+"</a></td>" +
+											"<td><a href='#nodeResource'>SNMP DOWN</a></td>" +
+											"<td><a href='#nodeResource'></a></td>" +
+											"<td><a href='#nodeResource'></a></td>" +						
+											"<td><a href='#nodeResource'></a></td>" +
+										"</tr>";
+								}
+							} else {
+								tableT +=
+									"<tr class='warning'>" +
+										"<td><a href='#nodeResource'>"+datosSnmp.records.record.name.toString()+"</a></td>" +
+										"<td><a href='#nodeResource'>SNMP DOWN</a></td>" +
+										"<td><a href='#nodeResource'></a></td>" +
+										"<td><a href='#nodeResource'></a></td>" +						
+										"<td><a href='#nodeResource'></a></td>" +
+									"</tr>";
+							}
+							
+							
+					
+					} catch (err) {
+						console.log(err);
+					};		
+					
+					
+					console.log(tableT);
+					
+					var rowsHeaders = [
+						{ "sTitle" : "Node Name" },
+						{ "sTitle" : "Event" },
+						{ "sTitle" : "Value" },
+						{ "sTitle" : "Element" },
+						{ "sTitle" : "Updated" }
+					];
+					
+					cnocConnector.drawGrid("listNodes", "listNodesG", tableT, rowsHeaders, false);
+				},				
+				divContainers : [ $('#listNodes') ],
+				divElements : [ $('#listNodesG') ]
+			});
+			
+			/*jQuery("#" + container).empty();	
 			var tableT = "";
 			
 			try {
@@ -527,7 +630,7 @@ var drawElementsGral = {
 				{ "sTitle" : "Updated" }
 			];
 			
-			cnocConnector.drawGrid(container, divTable, tableT, rowsHeaders, false);
+			cnocConnector.drawGrid(container, divTable, tableT, rowsHeaders, false);*/
 			
 		}, selectCustom : function(datos, selector, opt) {
 
@@ -1035,6 +1138,7 @@ var drawElementsGral = {
 								} else if (event.point.series.name === "Critical") {
 									status = "unreachable";
 								}
+								cnocConnector.invokeMashup(cnocConnector.service14, {"codenet" : cnocConnector.codeNetGlobal,"group":event.point.category,"status":status},drawElementsGral.drawListNodesV1, "listNodes", "listNodesG");
 							}
 						}
 					},
@@ -1091,6 +1195,38 @@ var drawElementsGral = {
 		
 		cnocConnector.drawGrid(container, divTable, tableT, rowsHeaders, false);
 		
+	},drawListNodesV1: function (datos, container, divTable){
+		jQuery("#" + container).empty();	
+		var tableT = "";
+		try {
+			if (datos.records.record.length > 1) {
+				for ( var i = 0; i < datos.records.record.length; i++) {
+					if(datos.records.record[i].status_value.toString()==="degraded"){
+						tableT += "<tr class='warning'><td>"+datos.records.record[i].name.toString()+"</td></tr>";
+					}else if(datos.records.record[i].status_value.toString()==="reachable"){
+						tableT += "<tr class='success'><td>"+datos.records.record[i].name.toString()+"</td></tr>";
+					}else if(datos.records.record[i].status_value.toString()==="unreachable"){
+						tableT += "<tr class='danger'><td>"+datos.records.record[i].name.toString()+"</td></tr>";
+					};					
+				};
+			} else {
+				if(datos.records.record.status_value.toString()==="degraded"){
+					tableT += "<tr class='warning'><td>"+datos.records.record.name.toString()+"</td></tr>";
+				}else if(datos.records.record.status_value.toString()==="reachable"){
+					tableT += "<tr class='success'><td>"+datos.records.record.name.toString()+"</td></tr>";
+				}else if(datos.records.record.status_value.toString()==="unreachable"){
+					tableT += "<tr class='danger'><td>"+datos.records.record.name.toString()+"</td></tr>";
+				}
+			}
+		} catch (err) {	};
+		/*GENERA ARRAY DE ENCABEZADOS DE GRAFICA*/
+		try {
+			var rowsHeaders = [{
+				"sTitle" : "Node Name"
+			}];
+		} catch (err) {	};
+		
+		var grid = cnocConnector.drawGrid(container, divTable, tableT, rowsHeaders, false);		
 	},countTotal: function(datos, container, divPanel){
 		/*GENERA ARRAY DE DATOS A GRAFICAR*/
 		var rowsData = new Array();
@@ -1814,6 +1950,23 @@ var drawElementsGral = {
 						for(var x=0; x<data.length; x++){
 							if(data[x].name==="cbqos-in"){
 								drawElementsPerformance.qosIn = true;
+							}else if(data[x].name==="bgpPeer"){
+								cnocConnector.invokeMashup(cnocConnector.service1, {
+        							"endpoint" : "http://"+nmis+"/omk/opCharts/nodes/"+name+"/resources/bgpPeer/indicies",
+        							"ip":nmis
+        						},function(data){		
+
+        							drawElementsPerformance.idResourceInterfaz = data.results.datum.value;
+        							
+        							var tree = "<ul><li><span class='treeNode badge badge-success'><i class='icon-minus-sign'></i> BGPPeer </span><ul>";
+        							tree += "<li onclick='drawElementsPerformance.drawBgp()' id='bgpPeer' class='bgpPeer'><span class='treeNode'><i class='icon-minus-sign'><a title='"+data.results.datum.name+"' href='#nodeChart'>"+data.results.datum.tokens[0]+"--"+data.results.datum.tokens[1]+"...</a></i></span></li>";
+        							tree += "</ul></li>";
+        							tree += "<ul>";
+        							
+        							
+        							$("#treeNodeDetailInterfaz").append(tree);
+
+        						}, null, null);
 							}
 						}
 					}, null, null);

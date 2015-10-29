@@ -17,6 +17,7 @@ var drawElementsPerformance = {
 		startDate: "",
 		vendor:"",
 		qosIn:"",
+		bgp:false,
 		
 		init : function(codeNet) {
 
@@ -192,10 +193,14 @@ var drawElementsPerformance = {
 				tree += "</ul></li>";
 				tree += "</ul></li></ul>";
 				tree += "<ul>";
+
 			}
 			
 			tree += "<li><span class='treeNode badge badge-success'><i class='icon-minus-sign'></i> Interface </span><ul>";
 			try {
+				
+				console.log(datos.results.datum.length);
+				console.log(datos.results.datum);
 				if (datos.results.datum.length > 1) {
 					for(var i=0; i<datos.results.datum.length; i++){
 						tree+= "<li class=''><span class='treeNode'><i class='icon-minus-sign intfChart'><a href='#nodeChart'>"+datos.results.datum[i].name.toString()+" -- "+datos.results.datum[i].value.toString()+"</a></i></span>";
@@ -462,6 +467,25 @@ var drawElementsPerformance = {
 				drawElementsPerformance.drawChartsPerformance(cnocConnector.service1, PrePolicyByteIn, "containerChartPerformance", "PrePolicyByte-In","#33297A");
 			}
 
+		},drawBgp: function(){
+			drawElementsPerformance.chartIdPerformance = "10";
+			drawElementsPerformance.subtitlePerformance = "";
+			drawElementsPerformance.dataChartPerformance.length = 0;
+			drawElementsPerformance.metricUnit = "";
+			drawElementsPerformance.subtitlePerformance += drawElementsPerformance.intfNodePerformance;
+			
+			
+			/*if(unidad==="bgpPeerStats"){
+				drawElementsPerformance.metricUnit = "BGP Peer Stats";
+			}else if(unidad==="bgpPeer"){
+				drawElementsPerformance.metricUnit = "BGP Peer Status";
+			}*/
+			
+			drawElementsPerformance.metricUnit = "BGP Peer Status";
+			var bgp = {"jsonRequest":'{"model":"nmis_graph","model_view":"graph","parameters":{"'+drawElementsPerformance.endUnix+'":"'+drawElementsPerformance.endDate+'","end_date_raw":'+drawElementsPerformance.endUnix+',"start_date_raw":'+drawElementsPerformance.startDate+',"lineType": "line", "graph_type":"bgpPeer","index_graph_type":"bgpPeer","resource_index": "'+drawElementsPerformance.idResourceInterfaz+'","node":"'+drawElementsPerformance.nodePerformance+'","translation":"","field":"","item":"","axis":"0"}}',"ip":drawElementsPerformance.nmis};			
+			
+			drawElementsPerformance.drawChartsPerformance(cnocConnector.service1, bgp, "containerChartPerformance", "bgp",null, true);
+		
 		},drawInterfaceQosHuawei: function(idResourceInterfaz){
 			drawElementsPerformance.chartIdPerformance = "";
 			drawElementsPerformance.metricUnit = "AVG Bytes.";
@@ -561,7 +585,7 @@ var drawElementsPerformance = {
 	   			},
 	   			success: function(response) {
 	   				var dataChart = "";
-	   				if(labelMetric === "pkts_hc" || labelMetric === "autil" || labelMetric === "errpkts_hc" || labelMetric === "availability" || labelMetric === "upsvoltin" || labelMetric === "upsvoltout" || labelMetric === "memoryH" || labelMetric === "QosHuawei"){
+	   				if(labelMetric === "pkts_hc" || labelMetric === "autil" || labelMetric === "errpkts_hc" || labelMetric === "availability" || labelMetric === "upsvoltin" || labelMetric === "upsvoltout" || labelMetric === "memoryH" || labelMetric === "QosHuawei"|| labelMetric === "bgp"){
 	   					var json = response.replyData.data;
 	   					var colorP = ["#0FFF00","#FFBB00","#0061FF","#33297A","#A80DFF","#C4FF0D","#FF0D45","#FF8A0D"];
 	   					for(var idx=0; idx<json.length; idx++){

@@ -769,6 +769,9 @@
 	<!-- TREE BOOTSTRAP -->
 	<script src="js/bootstrap-tree.js" /></script>
 	
+	<!-- EXPORT CVS ROWDATA HIGCHARTS -->
+	<script src="js/export-csv.js" /></script>
+	
 	<!-- Datetimepicker -->
 	<!--<script src="http://cdnjs.cloudflare.com/ajax/libs/moment.js/2.5.1/moment.min.js"></script>
 	<script src="http://cdnjs.cloudflare.com/ajax/libs/moment.js/2.4.0/lang/en-gb.js"></script>
