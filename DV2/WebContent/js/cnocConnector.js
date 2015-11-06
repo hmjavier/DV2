@@ -384,6 +384,11 @@ var cnocConnector = {
 					cnocConnector.invokeMashup(cnocConnector.service22, {"hostname" : id,"code_net":cnocConnector.codeNetGlobal},drawElementsGral.countTotal, "relatedIncidentsC", "relatedIncidentsCG");
 					cnocConnector.invokeMashup(cnocConnector.service23, {"hostname" : id,"code_net":cnocConnector.codeNetGlobal},drawElementsGral.countTotal, "relatedChangesC", "relatedChangesCG");
 					
+					/*GET TICKET RANGE*/
+					var date = new Date().getFullYear()+"-"+(new Date().getMonth()+1)+"-"+new Date().getDate();
+					
+					drawElementsPerformance.getTicketrange(cnocConnector.codeNetGlobal, date, null, id);
+					
 					/*** Validate if IP Accounting should be enabled ***/
 					cnocConnector.invokeMashup(
 							cnocConnector.service34,
@@ -1094,6 +1099,7 @@ var cnocConnector = {
 
         		}else{
             		$('option:selected', $('#'+container)).each(function() {
+
             			var data = $(this).val().split("|");
             			var name = data[0].toUpperCase();
             			var nmis = data[1];
@@ -1110,6 +1116,9 @@ var cnocConnector = {
             			drawElementsPerformance.startDate = startDate;
             			drawElementsPerformance.qosIn = false;
             			
+            			/*GET TOCKETS RANGE*/
+            			var date = new Date().getFullYear()+"-"+(new Date().getMonth()+1)+"-"+new Date().getDate();
+            			drawElementsPerformance.getTicketrange(cnocConnector.codeNetGlobal, date, null, name);
             			
             			if(model === 'PingOnly'){
             				drawElementsPerformance.selectPingOnly();
@@ -1151,16 +1160,22 @@ var cnocConnector = {
                         							"ip":nmis
                         						},function(data){		
 
-                        							drawElementsPerformance.idResourceInterfaz = data.results.datum.value;
+                        							//drawElementsPerformance.idResourceInterfaz = data.results.datum.value;
                         							
                         							var tree = "<ul><li><span class='treeNode badge badge-success'><i class='icon-minus-sign'></i> BGPPeer </span><ul>";
-                        							tree += "<li onclick='drawElementsPerformance.drawBgp()' id='bgpPeer' class='bgpPeer'><span class='treeNode'><i class='icon-minus-sign'><a title='"+data.results.datum.name+"' href='#nodeChart'>"+data.results.datum.tokens[0]+"--"+data.results.datum.tokens[1]+"...</a></i></span></li>";
+                        							tree += "<li id='"+data.results.datum.value+"' class='bgpPeer'><span class='treeNode'><i class='icon-minus-sign'><a title='"+data.results.datum.name+"' href='#nodeChart'>"+data.results.datum.tokens[0]+"--"+data.results.datum.tokens[1]+"...</a></i></span></li>";
                         							tree += "</ul></li>";
                         							tree += "<ul>";
                         							
                         							
                         							$("#treeNodeDetailInterfaz").append(tree);
-
+                        							
+                        							$( ".bgpPeer" ).click(function() {
+                        								drawElementsPerformance.idResourceInterfaz = $(this).attr( 'id' );
+                        								drawElementsPerformance.drawBgp();
+                        							});
+                        							
+                        							
                         						}, null, null);
             								}
             							}

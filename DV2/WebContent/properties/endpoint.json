@@ -8,5 +8,7 @@
 "getNmisGroups" : "/presto/edge/api/rest/ms_nmis_groups/Invoke?x-presto-resultFormat=json",
 "getOpFlowTopN" : "/presto/edge/api/rest/ms_rest_opflow/Invoke?x-presto-resultFormat=json",
 "getIpOpflow": "/presto/edge/api/rest/ms_get_ipflow/Invoke?x-presto-resultFormat=json",
-"getListNodesIpFlow" : "/presto/edge/api/rest/ms_get_nodes_ipflow_publica/Invoke?x-presto-resultFormat=json"
+"getListNodesIpFlow" : "/presto/edge/api/rest/ms_get_nodes_ipflow_publica/Invoke?x-presto-resultFormat=json",
+"getTicketsRangeTime" : "/presto/edge/api/rest/ms_im_incident_range_date/Invoke?x-presto-resultFormat=json",
+"getWarningByGroup" : "/presto/edge/api/rest/ms_gral_nmis_error_by_group/Invoke?x-presto-resultFormat=json"
 }

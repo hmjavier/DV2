@@ -28,12 +28,13 @@ var drawElementsPerformance = {
 			} else {
 				
 				cnocConnector.invokeMashup(cnocConnector.service9, {},drawElementsPerformance.selectCustom, "SelectCustomer", "opt");
+
 			}
 
 		},builder: function(codenet){	
-			
+
 			cnocConnector.invokeMashup(cnocConnector.service2, {"codenet" : codenet},drawElementsPerformance.drawListNodes, "listNodes", "listNodesP");
-		
+
 		},selectCustom : function(datos, selector, opt) {
 
 			var selText = cnocConnector.drawSelect(datos, selector, "performance");
@@ -46,6 +47,99 @@ var drawElementsPerformance = {
 
 			var selText = cnocConnector.drawSelectNodePerformance(datos, "SelectNode", "performance");
 		
+		},getTicketrange:function(codenet, startDate, endDate, node){
+
+			cnocFramework.invokeMashup({invokeUrl : endpoint.getTicketsRangeTime,
+				params : {
+					"code_net" : codenet,
+					"startDate" : startDate,
+					"endDate" : endDate,
+					"nodeName": node
+					},
+				callback : function(datos, container, divTable){
+					console.log(datos);
+					console.log(container[0].selector);
+					console.log(divTable[0].selector);
+									
+					
+					jQuery(container[0].selector).empty();
+					
+					var tableT = "";
+					try {
+						if (datos.records.record.length > 1) {
+							for ( var i = 0; i < datos.records.record.length; i++) {
+								
+								tableT += "<tr>";
+								tableT += "<td>"+datos.records.record[i].number.toString()+"</td>";
+								tableT += "<td>"+datos.records.record[i].hostname.toString()+"</td>";
+								tableT += "<td>"+datos.records.record[i].brief_description.toString()+"</td>";
+								tableT += "<td>"+datos.records.record[i].open_time.toString()+"</td>";
+								tableT += "<td>"+datos.records.record[i].last_update.toString()+"</td>";
+								tableT += "<td>"+datos.records.record[i].operator.toString()+"</td>";
+								tableT += "<td>"+datos.records.record[i].close_time.toString()+"</td>";
+								tableT += "<td>"+datos.records.record[i].problem_status.toString()+"</td>";
+								tableT += "</tr>";
+							}
+						} else {
+							tableT += "<tr>";
+							tableT += "<td>"+datos.records.record.number.toString()+"</td>";
+							tableT += "<td>"+datos.records.record.hostname.toString()+"</td>";
+							tableT += "<td>"+datos.records.record.brief_description.toString()+"</td>";
+							tableT += "<td>"+datos.records.record.open_time.toString()+"</td>";
+							tableT += "<td>"+datos.records.record.last_update.toString()+"</td>";
+							tableT += "<td>"+datos.records.record.operator.toString()+"</td>";
+							tableT += "<td>"+datos.records.record.close_time.toString()+"</td>";
+							tableT += "<td>"+datos.records.record.problem_status.toString()+"</td>";
+							tableT += "</tr>";
+						}
+					} catch (err) {	};
+					
+					var rowsHeaders = [ {
+						"sTitle" : "IM"
+					}, {
+						"sTitle" : "NAME"
+					}, {
+						"sTitle" : "DESCRIPTION"
+					}, {
+						"sTitle" : "OPEN TIME"
+					}, {
+						"sTitle" : "LAST UPDATE"
+					}, {
+						"sTitle" : "OPERATOR"
+					}, {
+						"sTitle" : "CLOSE TIME"
+					}, {
+						"sTitle" : "STATUS"
+					} ];
+					
+					jQuery(container[0].selector).append('<table  style="width:100%;" class="table table-striped table-hover" id="'+ divTable[0].selector.replace("#","") + '">'+tableT+'</table>');
+					
+					
+					dTable = jQuery(divTable[0].selector).dataTable({
+						"sDom": 'T<"clear">lfrtip',
+						"oTableTools": {
+					        "aButtons": [
+					            "copy",
+					            "csv",
+					            "xls"
+					            ]
+					    },
+						//"aaData" : rowsData,
+						"aoColumns" : rowsHeaders,
+						"sScrollX": "100%",
+						"sScrollXInner": "100%",
+						"sScrollY": 220,
+						"bScrollCollapse": true,
+						"bProcessing": true,
+						"bSort": true
+					});
+					
+					
+				},
+				divContainers :  [$("#containerTicketRangeG")],
+				divElements : [$("#containerTicketRange")]
+			});
+					
 		},selectPingOnly:function(){
 			$("#treeContainerInterfaz").empty();			
 			
@@ -198,9 +292,7 @@ var drawElementsPerformance = {
 			
 			tree += "<li><span class='treeNode badge badge-success'><i class='icon-minus-sign'></i> Interface </span><ul>";
 			try {
-				
-				console.log(datos.results.datum.length);
-				console.log(datos.results.datum);
+
 				if (datos.results.datum.length > 1) {
 					for(var i=0; i<datos.results.datum.length; i++){
 						tree+= "<li class=''><span class='treeNode'><i class='icon-minus-sign intfChart'><a href='#nodeChart'>"+datos.results.datum[i].name.toString()+" -- "+datos.results.datum[i].value.toString()+"</a></i></span>";
@@ -473,14 +565,7 @@ var drawElementsPerformance = {
 			drawElementsPerformance.dataChartPerformance.length = 0;
 			drawElementsPerformance.metricUnit = "";
 			drawElementsPerformance.subtitlePerformance += drawElementsPerformance.intfNodePerformance;
-			
-			
-			/*if(unidad==="bgpPeerStats"){
-				drawElementsPerformance.metricUnit = "BGP Peer Stats";
-			}else if(unidad==="bgpPeer"){
-				drawElementsPerformance.metricUnit = "BGP Peer Status";
-			}*/
-			
+
 			drawElementsPerformance.metricUnit = "BGP Peer Status";
 			var bgp = {"jsonRequest":'{"model":"nmis_graph","model_view":"graph","parameters":{"'+drawElementsPerformance.endUnix+'":"'+drawElementsPerformance.endDate+'","end_date_raw":'+drawElementsPerformance.endUnix+',"start_date_raw":'+drawElementsPerformance.startDate+',"lineType": "line", "graph_type":"bgpPeer","index_graph_type":"bgpPeer","resource_index": "'+drawElementsPerformance.idResourceInterfaz+'","node":"'+drawElementsPerformance.nodePerformance+'","translation":"","field":"","item":"","axis":"0"}}',"ip":drawElementsPerformance.nmis};			
 			
@@ -586,6 +671,13 @@ var drawElementsPerformance = {
 	   			success: function(response) {
 	   				var dataChart = "";
 	   				if(labelMetric === "pkts_hc" || labelMetric === "autil" || labelMetric === "errpkts_hc" || labelMetric === "availability" || labelMetric === "upsvoltin" || labelMetric === "upsvoltout" || labelMetric === "memoryH" || labelMetric === "QosHuawei"|| labelMetric === "bgp"){
+	   					
+	   					if(labelMetric === "bgp"){
+	   						$("#bgpLabel").show();
+	   					}else{
+	   						$("#bgpLabel").hide();
+	   					}
+	   					
 	   					var json = response.replyData.data;
 	   					var colorP = ["#0FFF00","#FFBB00","#0061FF","#33297A","#A80DFF","#C4FF0D","#FF0D45","#FF8A0D"];
 	   					for(var idx=0; idx<json.length; idx++){
@@ -597,8 +689,16 @@ var drawElementsPerformance = {
 	   						onDataReceived(dataChart);
 	   					}
 	   				}else{
+	   					
+	   					if(labelMetric === "bgp"){
+	   						$("#bgpLabel").show();
+	   					}else{
+	   						$("#bgpLabel").hide();
+	   					}
+	   					
 	   					if(labelMetric === "DropByte-Out" || labelMetric === "PrePolicyByte-Out" || labelMetric === "DropByte-In" || labelMetric === "PrePolicyByte-In"){
-		   					var data = [];		   					
+
+	   						var data = [];		   					
 		   					$.each( response.replyData.data[0].data, function( index, value ){
 		   						var dataTmp = [];
 		   						$.each( value, function( index, value ){	   
@@ -647,6 +747,13 @@ var drawElementsPerformance = {
 			drawElementsPerformance.endUnix = endDate;
 			drawElementsPerformance.endDate = "";
 			drawElementsPerformance.startDate = startDate;
+			
+			var dateTmp = new Date(startDate*1000);
+			console.log(dateTmp);
+			var date = dateTmp.getFullYear()+"-"+(dateTmp.getMonth()+1)+"-"+dateTmp.getDate();
+			console.log(date);
+			/* GET TICKETS POR RANGO */
+			drawElementsPerformance.getTicketrange(cnocConnector.codeNetGlobal, date, null , drawElementsPerformance.nodePerformance);
 			
 			if(container === "containerChartPerformanceInterfaz"){
 				drawElementsPerformance.drawInterfaceUtil("autil",container); // falta ver lo de unidad, divId

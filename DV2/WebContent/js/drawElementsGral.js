@@ -28,7 +28,7 @@ var drawElementsGral = {
 			}
 
 		},builder: function(codenet) {
-			console.log(codenet);
+
 			if(cnocConnector.codeNetGlobal === 'N000030') // If Banorte then draw National Map
 				this.mapaGeneral(codenet,"NACIONAL", true);
 			else
@@ -44,6 +44,96 @@ var drawElementsGral = {
 			cnocConnector.invokeMashup(cnocConnector.service5, {"code_net" : codenet},drawElementsGral.countTotal, "cOpen", "cOpenG");
 			cnocConnector.invokeMashup(cnocConnector.service15, {"code_net" : codenet},drawElementsGral.countTotal, "cIncident", "cIncidentG");						
 
+			/* get Warning  by Group*/
+			cnocFramework.invokeMashup({invokeUrl : endpoint.getWarningByGroup,
+				params : {
+					"codenet" : codenet
+					},
+				callback : function(datos, container, divElements){
+c
+					$("#chartGruposError").empty();
+					var events = new Array();
+					var groups =  new Array();
+					
+					$.each( datos.records.record, function( key, value ) {
+						
+						$.each( value, function( key, value ) {
+
+							if(key === 'event'){
+								if(events.length === 0){
+									events.push(value);
+								}else{
+									var flag = 0;
+									for(var i=0; i<events.length; i++){
+										if(events[i] === value){
+											flag = 1;
+										}
+									}									
+									if(flag === 0){
+										events.push(value);
+									}
+								}
+							}	
+							
+							if(key === 'group_column'){
+								if(groups.length === 0){
+									groups.push(value);
+								}else{
+									var flag = 0;
+									for(var i=0; i<groups.length; i++){
+										if(groups[i] === value){
+											flag = 1;
+										}
+									}									
+									if(flag === 0){
+										groups.push(value);
+									}
+								}
+							}
+							
+						});
+					});
+					
+					var table = "<table style='width:100%; font-size: 12px;' class='table' id='fallas'>";
+
+					table += "<tr><th></th>";
+					for(var j=0; j<groups.length; j++){
+						table += "<th>"+groups[j]+"</th>";
+					}
+					table += "</tr>";
+					
+					
+					var response = datos.records.record;
+					for(var j=0; j<events.length; j++){
+						table += "<tr>";
+						table += "<td>"+events[j]+"</td>";
+						
+						var flag = 0;
+						for(var y=0; y<groups.length; y++){
+							for(var i=0; i<response.length; i++){
+								
+								if(groups[y]=== response[i].group_column){									
+									if(events[j] === response[i].event){
+										table += "<td>"+response[i].total+"</td>";
+										flag = 1;
+									}									
+								}
+							}
+							if(flag === 0){
+								table += "<td>0</td>";
+							}
+						}
+						table += "</tr>";
+					}					
+
+					table += "</table>";
+					
+					$("#chartGruposError").append(table);
+					
+				},
+				divContainers :  [$("#chartGruposError")],
+				divElements : [$("#chartGruposErrorG")]
+			});
 			
 			/* get Nodes Op flow */
 			cnocFramework.invokeMashup({invokeUrl : endpoint.getListNodesIpFlow,
@@ -79,9 +169,7 @@ var drawElementsGral = {
 		
 		},
 		getListNodesIpFlow: function(datos, divContainers, divElements){
-			console.log("datos opflow");
-			console.log(datos);
-			
+
 			jQuery(divContainers[0].selector).empty();
 			var tableT = "";
 			try {
@@ -586,9 +674,6 @@ var drawElementsGral = {
 						console.log(err);
 					};		
 					
-					
-					console.log(tableT);
-					
 					var rowsHeaders = [
 						{ "sTitle" : "Node Name" },
 						{ "sTitle" : "Event" },
@@ -913,7 +998,6 @@ var drawElementsGral = {
 						}
 					}catch(e){
 						console.log(e);
-						console.log("fallo");
 					}
 					$( "#mapGral").unmask();
 				}
@@ -1408,9 +1492,6 @@ var drawElementsGral = {
 					cnocConnector.invokeMashup(cnocConnector.service24, {"node" : node, "codenet" : cnocConnector.codeNetGlobal},drawElementsGral.drawGetModel, "listNodeDetail", "listNodeDetailG");
 					cnocConnector.invokeMashup(cnocConnector.service22, {"hostname" : node,"code_net":cnocConnector.codeNetGlobal},drawElementsGral.countTotal, "relatedIncidentsC", "relatedIncidentsCG");
 					cnocConnector.invokeMashup(cnocConnector.service23, {"hostname" : node,"code_net":cnocConnector.codeNetGlobal},drawElementsGral.countTotal, "relatedChangesC", "relatedChangesCG");
-					
-					console.log(node);
-					console.log(drawElementsGral.intTops);
 					
 					cnocFramework.invokeMashup({invokeUrl : endpoint.getIpOpflow,
 						params : {
@@ -1959,13 +2040,17 @@ var drawElementsGral = {
         							drawElementsPerformance.idResourceInterfaz = data.results.datum.value;
         							
         							var tree = "<ul><li><span class='treeNode badge badge-success'><i class='icon-minus-sign'></i> BGPPeer </span><ul>";
-        							tree += "<li onclick='drawElementsPerformance.drawBgp()' id='bgpPeer' class='bgpPeer'><span class='treeNode'><i class='icon-minus-sign'><a title='"+data.results.datum.name+"' href='#nodeChart'>"+data.results.datum.tokens[0]+"--"+data.results.datum.tokens[1]+"...</a></i></span></li>";
+        							tree += "<li id='"+data.results.datum.value+"' class='bgpPeer'><span class='treeNode'><i class='icon-minus-sign'><a title='"+data.results.datum.name+"' href='#nodeChart'>"+data.results.datum.tokens[0]+"--"+data.results.datum.tokens[1]+"...</a></i></span></li>";
         							tree += "</ul></li>";
         							tree += "<ul>";
-        							
-        							
-        							$("#treeNodeDetailInterfaz").append(tree);
 
+        							$("#treeNodeDetailInterfaz").append(tree);
+        							
+        							$( ".bgpPeer" ).click(function() {
+        								drawElementsPerformance.idResourceInterfaz = $(this).attr( 'id' );
+        								drawElementsPerformance.drawBgp();
+        							});
+        							
         						}, null, null);
 							}
 						}
