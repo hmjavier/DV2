@@ -7,7 +7,9 @@
 	<link rel="stylesheet" type="text/css" href="css/style.css" />
 	<link rel="shortcut icon" href="./images/favicon.ico" />
 	<link rel="icon" type="image/png" href="cnoc.ico" />
-
+	<meta name="robots" content="noindex">
+	<meta name="googlebot" content="noindex">
+	
 	<script type="text/javascript" src="../presto/hub/jsapi/loader.js"></script>
 	<link rel="stylesheet" type="text/css" href="../presto/hub/css/prestoweb.css" />
 	<script>
@@ -24,6 +26,8 @@
 			text-align: center;
 		}		
 	</style>
+	
+	<script src="js/drawElementsPasswordExpired.js"></script>
 
 	<script>
 		(function($){ 
@@ -150,32 +154,80 @@
 											
 											var modules = module.split(";");
 											
-											if (modules.length == 1) {
-												if(module === "sisatck=true")
-													returnUrl = "/dashboard/sisatck.jsp";
-												else if(module === "tck=true")
-													returnUrl = "/dashboard/tickets.jsp";
-											} else if (codenets === "N000333")
-												returnUrl = "/dashboard/mainsct.jsp";
-		 									else if (codenets === "N000030")
-												returnUrl = "/dashboardBanorte/main.jsp";
-											else if (codenets === "N000290")
-												returnUrl = "/dashboardArca/main.jsp";
-											else if (codenets === "N000382")
-												returnUrl = "/dashboardPyrs/main.jsp";
-											else if (codenets === "N000099" || codenets === "N000462" ||
-													codenets === "N000396" || codenets === "N000469" ||
-													codenets === "N000479" || codenets === "N000425" ||
-													codenets === "N000434")
-												returnUrl = "/dashboardV2/main.jsp";
-											else if (ou === "PEXA-CUSTOM")
-												returnUrl = "/dashboardPEX/main.jsp";
-											else if (module.indexOf("gen=true") > -1)
-												returnUrl = "/dashboardV2/main.jsp";
-											else
-												returnUrl = "/dashboardV2/main.jsp";
-											
-											window.location.href = returnUrl;
+											connection.request({
+												sid : 'ms_getUser',
+												oid : 'Invoke',
+												params : {
+													"username" : username
+				                        		},
+												header : {}
+												}, {
+												onSuccess : function(response) {
+													var arrayDate = response.response.records.record.update_pwd.substring(0,10).split("-");
+													var update_pwd = new Date(arrayDate[0], arrayDate[1]-1, arrayDate[2]);
+													var today = new Date();
+													var lastUpdate = drawElementsPassword.getDaysBetween(update_pwd, today);
+													
+													if (lastUpdate >= 90) {
+														window.location.href = "passwordExpired.jsp";
+													
+													} else {
+														connection.request({
+															sid : 'ms_gral_nmis_db',
+															oid : 'Invoke',
+															params : {
+																"codenet" : codenets
+							                        		},
+															header : {}
+															}, {
+															onSuccess : function(response) {
+																
+																try {
+																	var modules = module.split(";");
+																	
+																	if (modules.length == 1) {
+																		if(module === "sisatck=true")
+																			returnUrl = "/dashboard/sisatck.jsp";
+																		else if(module === "tck=true")
+																			returnUrl = "/dashboard/tickets.jsp";
+																	} else if (codenets === "N000333")
+																		returnUrl = "/dashboard/mainsct.jsp";
+								 									else if (codenets === "N000030")
+																		returnUrl = "/dashboardBanorte/main.jsp";
+																	else if (codenets === "N000290")
+																		returnUrl = "/dashboardArca/main.jsp";
+																	else if (codenets === "N000099")
+																		returnUrl = "/dashboardLiverpool/main.jsp";
+																	else if (codenets === "N000382")
+																		returnUrl = "/dashboardPyrs/main.jsp";
+																	else if (response.response.records.record.nmis_db === "10.237.7.202" || response.response.records.record.nmis_db === "10.237.7.203")
+																		returnUrl = "/dashboardV2/main.jsp"
+																	else if (ou === "PEXA-CUSTOM")
+																		returnUrl = "/dashboardPEX/main.jsp";
+																	else if (module.indexOf("gen=true") > -1)
+																		returnUrl = "/dashboard/main.jsp";
+																	else
+																		returnUrl = "/dashboardSantander/main.jsp";
+																
+																} catch (err) {
+																	console.log(err);
+																	returnUrl = "/dashboardSantander/main.jsp";
+																}
+																
+																window.location.href = returnUrl;
+															},
+															onFailure : function(response) {
+																console.log(response);
+															},
+															scope : this
+														});
+													}
+												},
+												onFailure : function(response) {
+													console.log(response);
+												},
+												scope : this
+											});
 										},
 										onFailure : function(response) {
 											console.log(response);

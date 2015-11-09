@@ -129,8 +129,63 @@
 						    	<i class="fa fa-bar-chart-o fa-fw"></i> Chart
 						  	</div>
 						  	<div class="panel-body">
+						  		<div id="bgpLabel" style="font-size: 10px; width: 98%; margin-left: 1%;">
+						  			<div class="row">
+						  				<div class="col-lg-2">
+						  					<div class="list-group">
+											        <a href="#" class="list-group-item list-group-item-info">
+											            <span class="glyphicon glyphicon-asterisk"></span> Idle = 0%
+											        </a>								        						        
+											</div>
+						  				</div>
+						  				<div class="col-lg-2">
+											<div class="list-group">
+											        <a href="#" class="list-group-item list-group-item-info">
+											            <span class="glyphicon glyphicon-asterisk"></span> Connect = 20%
+											        </a>								        
+											</div>
+						  				</div>
+						  				<div class="col-lg-2">
+											<div class="list-group">
+											        <a href="#" class="list-group-item list-group-item-info">
+											            <span class="glyphicon glyphicon-asterisk"></span> Active = 40%
+											        </a>								        
+											</div>
+						  				</div>
+						  				<div class="col-lg-2">
+											<div class="list-group">
+											        <a href="#" class="list-group-item list-group-item-info">
+											            <span class="glyphicon glyphicon-asterisk"></span> Opensent = 60%
+											        </a>								        
+											</div>
+						  				</div>
+						  				<div class="col-lg-2">
+											<div class="list-group">
+											        <a href="#" class="list-group-item list-group-item-info">
+											            <span class="glyphicon glyphicon-asterisk"></span> Openconfirm = 80%
+											        </a>								        
+											</div>
+						  				</div>
+						  				<div class="col-lg-2">
+											<div class="list-group">
+											        <a href="#" class="list-group-item list-group-item-info">
+											            <span class="glyphicon glyphicon-asterisk"></span> Established = 100%
+											        </a>								        
+											</div>
+						  				</div> 
+						  			</div>
+						  		</div>
 						  		<a name="nodeChart"></a>
 						  		<div id="containerChartPerformance"></div>
+						  	</div>
+				    	</div>
+				    	<div class="panel panel-primary">
+				    		<div class="panel-heading">
+						    	<i class="fa fa-bar-chart-o fa-fw"></i> Tickets
+						  	</div>
+						  	<div class="panel-body">
+						  		<a name="nodeChart"></a>
+						  		<div id="containerTicketRangeG"></div>
 						  	</div>
 				    	</div>
 				    </div>
@@ -170,6 +225,11 @@
 	<script src="js/drawElementsPerformance.js"></script>
 	<script src="js/polygons.js"></script>
 	
+	<!-- Endpoint Properties -->
+	<script src="js/cnoc/endpoint.js"></script>
+	<!-- CNOC Framework -->
+	<script src="js/cnoc/cnocFramework.js"></script>
+	
 	<!-- higcharts -->
 	<script type="text/javascript" src="js/highcharts.js"></script>
 	<script type="text/javascript" src="js/exporting.js"></script>
@@ -187,6 +247,9 @@
 		
 	<!-- TREE BOOTSTRAP -->
 	<script src="js/bootstrap-tree.js" /></script>
+	
+	<!-- EXPORT CVS ROWDATA HIGCHARTS -->
+	<script src="js/export-csv.js" /></script>
 		
 	<script type="text/javascript">
 	
@@ -209,24 +272,35 @@
 			    }
 			});
 			
+			/*** Load Enpoints services ***/
+	    	endpoint.getproperties();
+			
 			/*Genera Menu*/
 			generateMenu();
 	
 		 	drawElementsPerformance.init();
 
 		 	$('.datesPerformance').datepicker({
-				format: "yyyy/mm/dd",
+				format: "yyyy-mm-dd",
 				todayBtn: true,
 			    autoclose: true,
 			    todayHighlight: true//,
 			    //startDate: '-5d'
 			});
 			
+		 	/* LABEL BGP */
+		 	$("#bgpLabel").hide();
+		 	
 			$("#selectGraph").click(function(event){
 				
 				var startDate = $("#startDate").val();
 				var endDate = $("#endDate").val();
 				var node = $("#SelectNode").val();
+				var name = node.split("|"); 
+
+				/*GET TICKETS RANGE*/
+				drawElementsPerformance.getTicketrange(cnocConnector.codeNetGlobal, startDate, endDate, name[0]);
+
 				if(startDate === "" || endDate === "" ){
 					alert("Elige un rango de fecha");
 				}else{

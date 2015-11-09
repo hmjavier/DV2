@@ -157,6 +157,7 @@ function generateMenu(){
         		}
         	});
         	
+        	$(".menuCnoc").append("<li><a href='pages/search.html'><i class='fa fa-fw fa-search'></i> Advanced Search </a></li>");
         	$(".menuCnoc").append("<li><a href='password.jsp'><i class='fa fa-fw fa-lock'></i> Change Password </a></li>");
         	
         	/** Load NMIS URLs **/
