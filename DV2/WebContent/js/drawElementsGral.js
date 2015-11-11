@@ -50,7 +50,7 @@ var drawElementsGral = {
 					"codenet" : codenet
 					},
 				callback : function(datos, container, divElements){
-c
+
 					$("#chartGruposError").empty();
 					var events = new Array();
 					var groups =  new Array();
