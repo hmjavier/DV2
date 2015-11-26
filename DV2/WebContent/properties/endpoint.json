@@ -1,6 +1,6 @@
 {
 
-"main" : "https://dashboard-i2.cnoc.telmexit.com",
+"main" : "http://dashboarddev.cnoc.telmexit.com:8080",
 "path":"/dashboardSantander",
 
 "logout":"/presto/edge/api/rest/UserManagerService/logout",
@@ -14,7 +14,6 @@
 "getListNodesIpFlow" : "/presto/edge/api/rest/ms_get_nodes_ipflow_publica/Invoke?x-presto-resultFormat=json",
 "getTicketsRangeTime" : "/presto/edge/api/rest/ms_im_incident_range_date/Invoke?x-presto-resultFormat=json",
 "getWarningByGroup" : "/presto/edge/api/rest/ms_gral_nmis_error_by_group/Invoke?x-presto-resultFormat=json",
-
 "getCurrentUser":"/presto/edge/api/rest/cnoc_global_variables/Invoke?x-presto-resultFormat=json",
 "getNetworkCodes" : "/presto/edge/api/rest/ms_getNetworkCodes/Invoke?x-presto-resultFormat=json",
 "getfilters" : "/presto/edge/api/rest/ms_se_ci_filter/Invoke?x-presto-resultFormat=json",

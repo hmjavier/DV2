@@ -61,12 +61,12 @@
                 <li>
                 	<div id="nmisUrlMain">
 						<div id="mpls_main">
-							<select data-placeholder="Open MPLS link..." id="mpls_select_main" style="width: 220px;" tabindex="2">
+							<select data-placeholder="Sucursales ..." id="mpls_select_main" style="width: 220px;" tabindex="2">
 								<option value=""></option>
 							</select>
 						</div>			
 						<div id="internet_main">
-							<select data-placeholder="Open Internet link..." id="internet_select_main" style="width: 220px;" tabindex="2">
+							<select data-placeholder="Cajeros ..." id="internet_select_main" style="width: 220px;" tabindex="2">
 								<option value=""></option>
 							</select>
 						</div>

@@ -50,7 +50,7 @@ var drawElementsGral = {
 					"codenet" : codenet
 					},
 				callback : function(datos, container, divElements){
-c
+
 					$("#chartGruposError").empty();
 					var events = new Array();
 					var groups =  new Array();
@@ -348,7 +348,7 @@ c
 						divElements[3].text(drawElementsGral.unreachableNodes.length);
 						
 						// Unmask all div containers 
-						cnocFramework.unmask(divContainers);
+						//cnocFramework.unmask(divContainers);
 						
 						/*** Draw node list ***/
 						drawElementsGral.listNodes('complete');

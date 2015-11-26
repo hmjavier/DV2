@@ -74,9 +74,9 @@ var drawElementsPerformance = {
 								tableT += "<td>"+datos.records.record[i].hostname.toString()+"</td>";
 								tableT += "<td>"+datos.records.record[i].brief_description.toString()+"</td>";
 								tableT += "<td>"+datos.records.record[i].open_time.toString()+"</td>";
-								tableT += "<td>"+datos.records.record[i].last_update.toString()+"</td>";
-								tableT += "<td>"+datos.records.record[i].operator.toString()+"</td>";
 								tableT += "<td>"+datos.records.record[i].close_time.toString()+"</td>";
+								tableT += "<td>"+datos.records.record[i].outage_time.toString()+"</td>";
+								tableT += "<td>"+datos.records.record[i].resolution_code.toString()+"</td>";
 								tableT += "<td>"+datos.records.record[i].problem_status.toString()+"</td>";
 								tableT += "</tr>";
 							}
@@ -86,9 +86,9 @@ var drawElementsPerformance = {
 							tableT += "<td>"+datos.records.record.hostname.toString()+"</td>";
 							tableT += "<td>"+datos.records.record.brief_description.toString()+"</td>";
 							tableT += "<td>"+datos.records.record.open_time.toString()+"</td>";
-							tableT += "<td>"+datos.records.record.last_update.toString()+"</td>";
-							tableT += "<td>"+datos.records.record.operator.toString()+"</td>";
 							tableT += "<td>"+datos.records.record.close_time.toString()+"</td>";
+							tableT += "<td>"+datos.records.record.outage_time.toString()+"</td>";
+							tableT += "<td>"+datos.records.record.resolution_code.toString()+"</td>";
 							tableT += "<td>"+datos.records.record.problem_status.toString()+"</td>";
 							tableT += "</tr>";
 						}
@@ -103,11 +103,11 @@ var drawElementsPerformance = {
 					}, {
 						"sTitle" : "OPEN TIME"
 					}, {
-						"sTitle" : "LAST UPDATE"
-					}, {
-						"sTitle" : "OPERATOR"
-					}, {
 						"sTitle" : "CLOSE TIME"
+					}, {
+						"sTitle" : "OUTAGE TIME"
+					}, {
+						"sTitle" : "RESOLUTION CODE"
 					}, {
 						"sTitle" : "STATUS"
 					} ];

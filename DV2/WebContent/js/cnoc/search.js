@@ -101,7 +101,7 @@ var search = {
 		var location = $( '#location_input' ).val();
 		var location_code = $( '#location_code_input' ).val();
 		var state = $( '#state_input' ).val();		
-		var customer_ticket = $( '#customer_ticket_input' ).val();
+		var customer_reference = $( '#customer_reference_input' ).val();
 		var vendor_ticket = $( '#vendor_ticket_input' ).val();
 		
 		if (status == null && 
@@ -113,7 +113,7 @@ var search = {
 			location === '' &&
 			location_code === '' &&
 			state === '' &&
-			customer_ticket === '' &&
+			customer_reference === '' &&
 			vendor_ticket === '') {
 			
 			$( '#modal_body' ).text( 'Please enter at least one search parameter.' );
@@ -187,7 +187,7 @@ var search = {
 						"location" : location,
 						"location_code" : location_code,
 						"state" : state,
-						"customer_ticket" : customer_ticket,
+						"customer_reference" : customer_reference,
 						"vendor_ticket" : vendor_ticket
 					},
 					callback : function(response, divContainers, divElements) {				
