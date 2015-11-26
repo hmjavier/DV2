@@ -8,6 +8,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
     <meta name="author" content="">
+    <meta name="robots" content="noindex">
+	<meta name="googlebot" content="noindex">
+    
 
     <title>:::Customer Network Operation Center (CNOC):::</title>
 	<link rel="icon" type="image/x-icon" href="cnoc.ico" />

@@ -351,6 +351,7 @@
 								  <li><a data-toggle="tab" href="#topOutOPFlow">Utilization OUT</a></li>
 								  <li><a data-toggle="tab" href="#otherTop">TOPS</a></li>
 								  <li><a data-toggle="tab" href="#chartGrupos">Groups</a></li>
+								  <li><a data-toggle="tab" href="#chartGruposError">Errors by Groups</a></li>
 								</ul>
 								
 								<div class="tab-content">
@@ -373,7 +374,10 @@
 					      				</ul>					    		
 							  		</div>
 							  		
-							    		<div id="chartGrupos" class="tab-pane fade" style="height: 500px;"></div>	
+							    	<div id="chartGrupos" class="tab-pane fade" style="height: 500px;"></div>	
+							  		
+							  		
+							  		<div id="chartGruposError" class="tab-pane fade"></div>
 							  		
 								</div>
 						  	</div>
@@ -479,6 +483,7 @@
 				</div>-->
 			<!-- /.row -->
 				<br>
+  	
 				  <div class="row">
 				    <div class="col-lg-3">
 
@@ -700,10 +705,56 @@
 						    	<i class="fa fa-bar-chart-o fa-fw"></i> Chart
 						  	</div>
 						  	<div class="panel-body">
+						  		<div id="bgpLabel" style="font-size: 10px; width: 98%; margin-left: 1%;">
+						  			<div class="row">
+						  				<div class="col-lg-2">
+						  					<div class="list-group">
+											        <a href="#" class="list-group-item list-group-item-info">
+											            <span class="glyphicon glyphicon-asterisk"></span> Idle = 0%
+											        </a>								        						        
+											</div>
+						  				</div>
+						  				<div class="col-lg-2">
+											<div class="list-group">
+											        <a href="#" class="list-group-item list-group-item-info">
+											            <span class="glyphicon glyphicon-asterisk"></span> Connect = 20%
+											        </a>								        
+											</div>
+						  				</div>
+						  				<div class="col-lg-2">
+											<div class="list-group">
+											        <a href="#" class="list-group-item list-group-item-info">
+											            <span class="glyphicon glyphicon-asterisk"></span> Active = 40%
+											        </a>								        
+											</div>
+						  				</div>
+						  				<div class="col-lg-2">
+											<div class="list-group">
+											        <a href="#" class="list-group-item list-group-item-info">
+											            <span class="glyphicon glyphicon-asterisk"></span> Opensent = 60%
+											        </a>								        
+											</div>
+						  				</div>
+						  				<div class="col-lg-2">
+											<div class="list-group">
+											        <a href="#" class="list-group-item list-group-item-info">
+											            <span class="glyphicon glyphicon-asterisk"></span> Openconfirm = 80%
+											        </a>								        
+											</div>
+						  				</div>
+						  				<div class="col-lg-2">
+											<div class="list-group">
+											        <a href="#" class="list-group-item list-group-item-info">
+											            <span class="glyphicon glyphicon-asterisk"></span> Established = 100%
+											        </a>								        
+											</div>
+						  				</div> 
+						  			</div>
+						  		</div>
 						  		<a name="nodeChart"></a>
 						  		<div id="containerChartPerformance"></div>
 						  	</div>
-				    	</div>
+				    	</div>				    	
 				    	<div class="panel panel-primary chartFirewall">
 				    		<div class="panel-heading">
 						    	<h3 class="panel-title">Firewall</h3>
@@ -717,7 +768,19 @@
 				  </div>
 
 				<!-- /.row -->
-				
+					<div class="row">
+					  	<div class="col-lg-12">
+					  		<div class="panel panel-primary">
+					    		<div class="panel-heading">
+							    	<i class="fa fa-bar-chart-o fa-fw"></i> Tickets
+							  	</div>
+							  	<div class="panel-body">
+							  		<a name="nodeChart"></a>
+							  		<div id="containerTicketRangeG"></div>
+							  	</div>
+					    	</div>
+					  	</div>
+				  	</div>
             </div>
             <%@ include file="footer.jsp" %>
             <!-- /.container-fluid -->
@@ -761,13 +824,16 @@
 	<!-- jQuery Loadmask -->
 	<script src="js/jquery-loadmask-0.4/jquery.loadmask.min.js"></script>
 	<!-- google maps -->
-	<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
+	<script src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script>
 	
 	<!-- remove css/js -->
 	<script type="text/javascript" src="js/script.js"></script>	
 	
 	<!-- TREE BOOTSTRAP -->
 	<script src="js/bootstrap-tree.js" /></script>
+	
+	<!-- EXPORT CVS ROWDATA HIGCHARTS -->
+	<script src="js/export-csv.js" /></script>
 	
 	<!-- Datetimepicker -->
 	<!--<script src="http://cdnjs.cloudflare.com/ajax/libs/moment.js/2.5.1/moment.min.js"></script>
@@ -831,7 +897,8 @@
 			/*Genera Menu*/
 			generateMenu();
 		 	
-		 
+		 	$("#bgpLabel").hide();
+		 	
 		 	$('#countAll').click(function() {
 		 		/*** Draw complete node list ***/
 				drawElementsGral.listNodes('complete');

@@ -16,6 +16,9 @@ var endpoint = {
 				endpoint.getOpFlowTopN = endpoint.main + data.getOpFlowTopN;
 				endpoint.getIpOpflow = endpoint.main + data.getIpOpflow;
 				endpoint.getListNodesIpFlow = endpoint.main + data.getListNodesIpFlow;
+				endpoint.getDegradedNodesList = endpoint.main + data.getDegradedNodesList;
+				endpoint.getTicketsRangeTime = endpoint.main + data.getTicketsRangeTime;
+				endpoint.getWarningByGroup = endpoint.main + data.getWarningByGroup;
 			}
 		});
 	}

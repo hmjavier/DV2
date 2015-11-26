@@ -411,6 +411,22 @@
 	<script type="text/javascript">
 	cnocConnector.refresh = <%=request.getParameter("refresh")%>
 	</script>
+	
+	
+	
+	<link rel="stylesheet" href="http://kendo.cdn.telerik.com/2015.3.930/styles/kendo.common.min.css">
+    <link rel="stylesheet" href="http://kendo.cdn.telerik.com/2015.3.930/styles/kendo.rtl.min.css">
+    <link rel="stylesheet" href="http://kendo.cdn.telerik.com/2015.3.930/styles/kendo.default.min.css">
+    <link rel="stylesheet" href="http://kendo.cdn.telerik.com/2015.3.930/styles/kendo.dataviz.min.css">
+    <link rel="stylesheet" href="http://kendo.cdn.telerik.com/2015.3.930/styles/kendo.dataviz.default.min.css">
+    <link rel="stylesheet" href="http://kendo.cdn.telerik.com/2015.3.930/styles/kendo.mobile.all.min.css">
+
+    <!--<script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>-->
+    <script src="http://kendo.cdn.telerik.com/2015.3.930/js/jszip.min.js"></script>
+    <script src="http://kendo.cdn.telerik.com/2015.3.930/js/kendo.all.min.js"></script>
+	
+	
+	
 	<script type="text/javascript">
 	
 	var stylesMap = null;
