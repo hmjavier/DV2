@@ -22,7 +22,7 @@
             </div>  
             <ul class="nav navbar-right top-nav">            	
                 <li class="dropdown">
-                    <a href="#" class="btn btn-primary" data-toggle="dropdown"><i class="fa fa-dashboard"></i> Dashboards <b class="caret"></b></a>
+                    <a href="#" class="btn btn-primary" data-toggle="dropdown" id="dashboardButton"><i class="fa fa-dashboard"></i> Dashboards <b class="caret"></b></a>
                     <ul class="dropdown-menu menuCnoc">
                         <!-- 
 	                    <li>

@@ -12,7 +12,7 @@ var cnocConnector = {
 	nmisServer:'',
 	community1:'',
 	community2:'',
-	
+	/*
 	invokeMashup : function(invokeUrl, params, callback, divcontainer, divelements) { //***** DEV *****
 			$( "#" + divcontainer ).mask("Waiting...");
 		try {
@@ -45,7 +45,7 @@ var cnocConnector = {
 			$( "#" + divcontainer ).unmask();
 		}
 	},
-	/*
+	*/
 	invokeMashup : function(invokeUrl, params, callback, divcontainer, divelements) { //***** PROD *****
 		$( "#" + divcontainer ).mask("Waiting...");
 		try {
@@ -84,7 +84,7 @@ var cnocConnector = {
 			$( "#" + divcontainer ).unmask();
 		}
 	},
-	*/
+	
 	drawGrid : function(container, divTable, rowsData, rowsHeaders, pagination) {
 		jQuery("#" + container).empty();
 				
@@ -384,11 +384,6 @@ var cnocConnector = {
 					cnocConnector.invokeMashup(cnocConnector.service22, {"hostname" : id,"code_net":cnocConnector.codeNetGlobal},drawElementsGral.countTotal, "relatedIncidentsC", "relatedIncidentsCG");
 					cnocConnector.invokeMashup(cnocConnector.service23, {"hostname" : id,"code_net":cnocConnector.codeNetGlobal},drawElementsGral.countTotal, "relatedChangesC", "relatedChangesCG");
 					
-					/*GET TICKET RANGE*/
-					var date = new Date().getFullYear()+"-"+(new Date().getMonth()+1)+"-"+new Date().getDate();
-					
-					drawElementsPerformance.getTicketrange(cnocConnector.codeNetGlobal, date, null, id);
-					
 					/*** Validate if IP Accounting should be enabled ***/
 					cnocConnector.invokeMashup(
 							cnocConnector.service34,
@@ -527,38 +522,6 @@ var cnocConnector = {
 					$( '#page-wrapper' ).unmask();
 							
 					modal.modal("show");
-					
-					/*
-					var workbook = new kendo.ooxml.Workbook({
-						  sheets: [
-						    {
-						      columns: [ { autoWidth: true } ],
-						      rows: [
-						        {
-						          cells: [
-						            {
-						              value: "ID"
-						            },{
-						              value: ""
-						            },{
-						              value: "ID"
-						            },{
-						              value: "ID"
-						            },{
-						              value: $("#journal").html()
-						            }
-						          ]
-						        }
-						      ]
-						    }
-						  ]
-						});
-					
-					kendo.saveAs({
-					    dataURI: workbook.toDataURL(),
-					    fileName: "Test.xlsx"
-					});
-					*/
 					
 				}
 			});
@@ -729,15 +692,7 @@ var cnocConnector = {
                                         	drawElementsPerformance.subtitlePerformance = "Interface bits: ";
                                         	drawElementsPerformance.drawInterfaceUtil("abits"); 
                                         }
-                                    }/*,{
-                                        text: 'BGP Peer Stats',
-                                        onclick: function() { 
-                                        	drawElementsPerformance.subtitlePerformance = "";
-                                        	drawElementsPerformance.dataChartPerformance.length = 0;
-                                        	drawElementsPerformance.subtitlePerformance = " ";
-                                        	drawElementsPerformance.drawBgp("bgpPeerStats"); 
-                                        }
-                                    }*/                            
+                                    }                            
                                 ]
                     },
                     customButton2:
@@ -1099,7 +1054,6 @@ var cnocConnector = {
 
         		}else{
             		$('option:selected', $('#'+container)).each(function() {
-
             			var data = $(this).val().split("|");
             			var name = data[0].toUpperCase();
             			var nmis = data[1];
@@ -1116,9 +1070,6 @@ var cnocConnector = {
             			drawElementsPerformance.startDate = startDate;
             			drawElementsPerformance.qosIn = false;
             			
-            			/*GET TOCKETS RANGE*/
-            			var date = new Date().getFullYear()+"-"+(new Date().getMonth()+1)+"-"+new Date().getDate();
-            			drawElementsPerformance.getTicketrange(cnocConnector.codeNetGlobal, date, null, name);
             			
             			if(model === 'PingOnly'){
             				drawElementsPerformance.selectPingOnly();
@@ -1151,32 +1102,7 @@ var cnocConnector = {
             						},function(data){							
             							for(var x=0; x<data.length; x++){
             								if(data[x].name==="cbqos-in"){
-            									
             									drawElementsPerformance.qosIn = true;
-            									
-            								}else if(data[x].name==="bgpPeer"){
-            									cnocConnector.invokeMashup(cnocConnector.service1, {
-                        							"endpoint" : "http://"+nmis+"/omk/opCharts/nodes/"+name+"/resources/bgpPeer/indicies",
-                        							"ip":nmis
-                        						},function(data){		
-
-                        							//drawElementsPerformance.idResourceInterfaz = data.results.datum.value;
-                        							
-                        							var tree = "<ul><li><span class='treeNode badge badge-success'><i class='icon-minus-sign'></i> BGPPeer </span><ul>";
-                        							tree += "<li id='"+data.results.datum.value+"' class='bgpPeer'><span class='treeNode'><i class='icon-minus-sign'><a title='"+data.results.datum.name+"' href='#nodeChart'>"+data.results.datum.tokens[0]+"--"+data.results.datum.tokens[1]+"...</a></i></span></li>";
-                        							tree += "</ul></li>";
-                        							tree += "<ul>";
-                        							
-                        							
-                        							$("#treeNodeDetailInterfaz").append(tree);
-                        							
-                        							$( ".bgpPeer" ).click(function() {
-                        								drawElementsPerformance.idResourceInterfaz = $(this).attr( 'id' );
-                        								drawElementsPerformance.drawBgp();
-                        							});
-                        							
-                        							
-                        						}, null, null);
             								}
             							}
             						}, null, null);
@@ -1257,13 +1183,12 @@ var cnocConnector = {
 		drawElementsPerformanceGraph.dataChartInterface.length = 0;
 		
 			$('option:selected', $('#SelectNode')).each(function() {
-				console.log($(this).val());
+
 	        	var data = $(this).val().split("|");
 				var name = data[0].toUpperCase();
 				var nmis = data[1];
 				var vendor = data[2];
 				drawElementsPerformanceGraph.nmis = nmis;
-				drawElementsPerformanceGraph.nodeNameP = name;
 				
 				if(vendor === "HuaweiRouter" && metric === "qos"){
 					cnocConnector.invokeMashup(cnocConnector.service1, {

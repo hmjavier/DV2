@@ -27,7 +27,7 @@ var cnocFramework = {
 		try {
 			$.ajax({
 				type : 'GET',
-				dataType : 'jsonp',
+				dataType : 'json',
 				url : request.invokeUrl,
 				data : request.params,
 				error : function(jqXHR, textStatus, errorThrown) {

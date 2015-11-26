@@ -97,6 +97,9 @@ function generateMenu(){
         	$(".nameCustomer").text(cnocConnector.userName);
         	
         	$.each(menu, function( index, value ) {
+        		
+        		value = value.trim();
+        		
         		if(value === "gen=true"){
         			var general = "<li><a href='main.jsp'><i class='fa fa-fw fa-home'></i> Home </a></li>";
         			general +="<li><a href='incidents.jsp'><i class='fa fa-fw fa-warning'></i> Incidents </a></li>";

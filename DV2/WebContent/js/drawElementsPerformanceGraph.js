@@ -18,7 +18,6 @@ var drawElementsPerformanceGraph = {
 		endDate: "",
 		startDate: "",
 		vendor:"",
-		nodeNameP : "",
 		
 		init : function(codeNet) {			
 			if (codeNet != undefined) {
@@ -138,13 +137,12 @@ var drawElementsPerformanceGraph = {
 			drawElementsPerformanceGraph.drawChartsPerformance(cnocConnector.service1, qosIn, drawElementsPerformanceGraph.containerChartIn, "qos",null, true, name);
 
 		},drawInterfaceQosHuawei: function(name, idResourceInterfaz, subtitleQos){
-			console.log(drawElementsPerformanceGraph.nodeNameP);
 			drawElementsPerformanceGraph.chartIdPerformance = "8";
 			drawElementsPerformanceGraph.subtitlePerformance = "";
 			drawElementsPerformanceGraph.metricUnit = "AVG Bytes.";
 			
-			var qos =  {"jsonRequest":'{"model":"nmis_graph","model_view":"graph","parameters":{"'+drawElementsPerformanceGraph.endUnix+'":"'+drawElementsPerformanceGraph.endDate+'","end_date_raw":'+drawElementsPerformanceGraph.endUnix+',"start_date_raw":'+drawElementsPerformanceGraph.startDate+',"graph_type":"QualityOfServiceStat","index_graph_type": "QualityOfServiceStat","resource_index": "'+idResourceInterfaz+'","node":"'+drawElementsPerformanceGraph.nodeNameP+'","translation":"","field":"","item":""}}',"ip":drawElementsPerformanceGraph.nmis};
-			drawElementsPerformanceGraph.drawChartsPerformance(cnocConnector.service1, qos, drawElementsPerformanceGraph.containerChart, "QosHuawei",null, true, drawElementsPerformanceGraph.nodeNameP, subtitleQos);
+			var qos =  {"jsonRequest":'{"model":"nmis_graph","model_view":"graph","parameters":{"'+drawElementsPerformanceGraph.endUnix+'":"'+drawElementsPerformanceGraph.endDate+'","end_date_raw":'+drawElementsPerformanceGraph.endUnix+',"start_date_raw":'+drawElementsPerformanceGraph.startDate+',"graph_type":"QualityOfServiceStat","index_graph_type": "QualityOfServiceStat","resource_index": "'+idResourceInterfaz+'","node":"'+name+'","translation":"","field":"","item":""}}',"ip":drawElementsPerformanceGraph.nmis};
+			drawElementsPerformanceGraph.drawChartsPerformance(cnocConnector.service1, qos, drawElementsPerformanceGraph.containerChart, "QosHuawei",null, true, name, subtitleQos);
 						
 		},drawChartCPUHuawei: function(name){
 			drawElementsPerformanceGraph.chartIdPerformance = "1";
@@ -275,21 +273,19 @@ var drawElementsPerformanceGraph = {
  			
  			
 		},drawInterfacesQosHuawei:function(datos){
-			console.log(datos);
+
 			$( "#cmbNodesPerformanceInterfazC" ).mask("Waiting...");
 			try{
 				if (datos.results.datum.length > 1) {				
 					
 					for(var i=0; i<datos.results.datum.length; i++){						
-						var nodeTmp = datos.results.datum[i].url.toString().replace("/en").split("/");
-						console.log(nodeTmp);
+						var nodeTmp = datos.results.datum[i].url.toString().split("/");
 						var node = nodeTmp[4];
-						console.log(node);
 						var interfaces = node +"|"+datos.results.datum[i].value.toString()+"|"+drawElementsPerformanceGraph.nmis+"|"+datos.results.datum[i].tokens[0];
 						drawElementsPerformanceGraph.dataChartInterface.push(interfaces);
 					}					
 				}else{
-					var nodeTmp = datos.results.datum.url.toString().replace("/en").split("/");
+					var nodeTmp = datos.results.datum.url.toString().split("/");
 					var node = nodeTmp[3];
 					var interfaces = node +"|"+datos.results.datum.value.toString()+"|"+drawElementsPerformanceGraph.nmis+"|"+datos.results.datum.tokens[0];
 					drawElementsPerformanceGraph.dataChartInterface.push(interfaces);
