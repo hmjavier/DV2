@@ -45,7 +45,7 @@ var cnocConnector = {
 			$( "#" + divcontainer ).unmask();
 		}
 	},
-	*/
+	*/	
 	invokeMashup : function(invokeUrl, params, callback, divcontainer, divelements) { //***** PROD *****
 		$( "#" + divcontainer ).mask("Waiting...");
 		try {

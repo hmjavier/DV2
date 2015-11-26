@@ -455,6 +455,7 @@ var drawElementsIncidents = {
 							fields.push(datos.records.record[i].open_time.toString());
 							fields.push(datos.records.record[i].last_update.toString());							
 							fields.push(datos.records.record[i].close_time.toString());
+							fields.push(datos.records.record[i].resolved_time.toString());
 							fields.push(datos.records.record[i].service_type.toString());
 							rowsData.push(fields);
 						}
@@ -471,7 +472,8 @@ var drawElementsIncidents = {
 						fields.push(datos.records.record.problem_status.toString());
 						fields.push(datos.records.record.open_time.toString());
 						fields.push(datos.records.record.last_update.toString());
-						fields.push(datos.records.record.close_time.toString());	
+						fields.push(datos.records.record.close_time.toString());
+						fields.push(datos.records.record.resolved_time.toString());
 						fields.push(datos.records.record.service_type.toString());
 						rowsData.push(fields);
 					}
@@ -502,6 +504,8 @@ var drawElementsIncidents = {
 					"sTitle" : "Last Update"
 				}, {
 					"sTitle" : "Close Time"
+				}, {
+					"sTitle" : "Resolved Time"
 				}, {
 					"sTitle" : "Service Type"
 				} ];
