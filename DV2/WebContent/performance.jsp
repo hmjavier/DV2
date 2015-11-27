@@ -170,7 +170,7 @@
 											<div class="list-group">
 											        <a href="#" class="list-group-item list-group-item-info">
 											            <span class="glyphicon glyphicon-asterisk"></span> Established = 100%
-											        </a>								        
+											        </a>
 											</div>
 						  				</div> 
 						  			</div>
@@ -273,7 +273,7 @@
 			});
 			
 			/*** Load Enpoints services ***/
-	    	endpoint.getproperties();
+	    	endpoint.getMainProperties();
 			
 			/*Genera Menu*/
 			generateMenu();
