@@ -1,6 +1,6 @@
 {
 
-"main" : "http://dashboarddev.cnoc.telmexit.com:8080",
+"main" : "",
 "path":"/dashboardSantander",
 
 "logout":"/presto/edge/api/rest/UserManagerService/logout",

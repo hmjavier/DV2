@@ -45,94 +45,57 @@ var drawElementsGral = {
 			cnocConnector.invokeMashup(cnocConnector.service15, {"code_net" : codenet},drawElementsGral.countTotal, "cIncident", "cIncidentG");						
 
 			/* get Warning  by Group*/
-			cnocFramework.invokeMashup({invokeUrl : endpoint.getWarningByGroup,
-				params : {
-					"codenet" : codenet
-					},
-				callback : function(datos, container, divElements){
-
-					$("#chartGruposError").empty();
-					var events = new Array();
-					var groups =  new Array();
+			cnocFramework.invokeMashup({
+				invokeUrl : endpoint.getWarningByGroup,
+				params : { "codenet" : codenet },
+				callback : function(response, divContainers, divElements) {
+					divContainers[0].empty();
+					divContainers[0].append(
+						'<table class="table table-striped">' +
+							'<thead>' +
+								'<tr>' +
+									'<th>Group</th>' +
+									'<th>Proactive Interface Availability</th>' +
+									'<th>Proactive Interface Input Utilisation</th>' +
+									'<th>Proactive Interface Output Utilisation</th>' +
+									'<th>Proactive Reachability</th>' +
+									'<th>Proactive Response Time</th>' +
+									'<th>UPS en Modo Bateria</th>' +
+									'<th>Proactive Interface Error Input Packets</th>' +
+									'<th>Proactive Interface Error Output Packets</th>' +
+									'<th>BGP Peer Down</th>' +
+									'<th>Proactive CPU</th>' +
+									'<th>Proactive Interface Discards Input Packets</th>' +
+									'<th>Proactive Interface Discards Output Packets</th>' +
+									'<th>Proactive Memory Free</th>' +
+									'<th>Proactive Dead Modem</th>' +
+								'</tr>' +
+							'</thead>' +
+						'</table>');
 					
-					$.each( datos.records.record, function( key, value ) {
-						
-						$.each( value, function( key, value ) {
-
-							if(key === 'event'){
-								if(events.length === 0){
-									events.push(value);
-								}else{
-									var flag = 0;
-									for(var i=0; i<events.length; i++){
-										if(events[i] === value){
-											flag = 1;
-										}
-									}									
-									if(flag === 0){
-										events.push(value);
-									}
-								}
-							}	
-							
-							if(key === 'group_column'){
-								if(groups.length === 0){
-									groups.push(value);
-								}else{
-									var flag = 0;
-									for(var i=0; i<groups.length; i++){
-										if(groups[i] === value){
-											flag = 1;
-										}
-									}									
-									if(flag === 0){
-										groups.push(value);
-									}
-								}
-							}
-							
-						});
-					});
-					
-					var table = "<table style='width:100%; font-size: 12px;' class='table' id='fallas'>";
-
-					table += "<tr><th></th>";
-					for(var j=0; j<groups.length; j++){
-						table += "<th>"+groups[j]+"</th>";
-					}
-					table += "</tr>";
-					
-					
-					var response = datos.records.record;
-					for(var j=0; j<events.length; j++){
-						table += "<tr>";
-						table += "<td>"+events[j]+"</td>";
-						
-						var flag = 0;
-						for(var y=0; y<groups.length; y++){
-							for(var i=0; i<response.length; i++){
-								
-								if(groups[y]=== response[i].group_column){									
-									if(events[j] === response[i].event){
-										table += "<td>"+response[i].total+"</td>";
-										flag = 1;
-									}									
-								}
-							}
-							if(flag === 0){
-								table += "<td>0</td>";
-							}
-						}
-						table += "</tr>";
-					}					
-
-					table += "</table>";
-					
-					$("#chartGruposError").append(table);
-					
+					$.each(response.records.record, function(k, v) {
+						$( divContainers[0].selector + ' > table').append(
+							'<tr>' +
+								'<td>' + v.group_column +  '</td>' +
+								'<td>' + v.proactive_interface_availability +  '</td>' +
+								'<td>' + v.proactive_interface_input_utilisation +  '</td>' +
+								'<td>' + v.proactive_interface_output_utilisation +  '</td>' +
+								'<td>' + v.proactive_reachability +  '</td>' +
+								'<td>' + v.proactive_response_time +  '</td>' +
+								'<td>' + v.ups_en_modo_bateria +  '</td>' +
+								'<td>' + v.proactive_interface_error_input_packets +  '</td>' +
+								'<td>' + v.proactive_interface_error_output_packets +  '</td>' +
+								'<td>' + v.bgp_peer_down +  '</td>' +
+								'<td>' + v.proactive_cpu +  '</td>' +
+								'<td>' + v.proactive_interface_discards_input_packets +  '</td>' +
+								'<td>' + v.proactive_interface_discards_output_packets +  '</td>' +
+								'<td>' + v.proactive_memory_free +  '</td>' +
+								'<td>' + v.proactive_dead_modem +  '</td>' +							
+							'</tr>');
+					});					
 				},
-				divContainers :  [$("#chartGruposError")],
-				divElements : [$("#chartGruposErrorG")]
+				divContainers : [ $("#chartGruposError") ] ,
+				divElements : [ $("#chartGruposErrorG") ]
 			});
 			
 			/* get Nodes Op flow */
@@ -647,8 +610,8 @@ var drawElementsGral = {
 			} else if (status === 'degraded') { // Draw degraded node list
 				//nodeList = nodeList.concat(drawElementsGral.degradedNodes);
 				//drawElementsGral.getNodesByStatus(status, cnocConnector.codeNetGlobal);
-				//drawElementsGral.getListNodesDegraded();
-				cnocConnector.invokeMashup(cnocConnector.service14, {"codenet" : cnocConnector.codeNetGlobal,"group":"","status":status},drawElementsGral.drawListNodesV1, "listNodes", "listNodesG");
+				drawElementsGral.getListNodesDegraded();
+				//cnocConnector.invokeMashup(cnocConnector.service14, {"codenet" : cnocConnector.codeNetGlobal,"group":"","status":status},drawElementsGral.drawListNodesV1, "listNodes", "listNodesG");
 			
 			} else if (status === 'unreachable') { // Draw unreachable node list
 				nodeList = nodeList.concat(drawElementsGral.unreachableNodes);
@@ -1290,7 +1253,8 @@ var drawElementsGral = {
 								} else if (event.point.series.name === "Critical") {
 									status = "unreachable";
 								}
-								cnocConnector.invokeMashup(cnocConnector.service14, {"codenet" : cnocConnector.codeNetGlobal,"group":event.point.category,"status":status},drawElementsGral.drawListNodesV1, "listNodes", "listNodesG");
+								drawElementsGral.getListNodesDegraded();
+								//cnocConnector.invokeMashup(cnocConnector.service14, {"codenet" : cnocConnector.codeNetGlobal,"group":event.point.category,"status":status},drawElementsGral.drawListNodesV1, "listNodes", "listNodesG");
 							}
 						}
 					},

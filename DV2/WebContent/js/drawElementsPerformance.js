@@ -292,21 +292,19 @@ var drawElementsPerformance = {
 			
 			tree += "<li><span class='treeNode badge badge-success'><i class='icon-minus-sign'></i> Interface </span><ul>";
 			try {
-
 				if (datos.results.datum.length > 1) {
-					for(var i=0; i<datos.results.datum.length; i++){
+					for(var i=0; i<datos.results.datum.length; i++) {
 						tree+= "<li class=''><span class='treeNode'><i class='icon-minus-sign intfChart'><a href='#nodeChart'>"+datos.results.datum[i].name.toString()+" -- "+datos.results.datum[i].value.toString()+"</a></i></span>";
-						
-						var tmp = datos.results.datum[i].name.toString().split("--");						
-						
-						if(tmp[1].trim() === drawElementsGral.intTops){
+						var tmp = datos.results.datum[i].name.toString().split("--");
+//						if(tmp[1].trim() === drawElementsGral.intTops) {
 							drawElementsPerformance.dataChartPerformanceUtil.length = 0;
-							drawElementsPerformance.intfNodePerformance = tmp[0]+ " -- " +tmp[1];
+//							drawElementsPerformance.intfNodePerformance = tmp[0]+ " -- " +tmp[1];
+							drawElementsPerformance.intfNodePerformance=datos.results.datum[i].name.toString();
 							drawElementsPerformance.idResourceInterfaz = datos.results.datum[i].value.toString();
 							drawElementsPerformance.drawInterfaceUtil("autil","containerChartPerformanceInterfaz");
-						}
-						
-						if(datos.results.datum[i].active.toString() === "1"){
+//						}
+
+						if(datos.results.datum[i].active.toString() === "1") {
 							tree+= "<ul><li><span class='treeNode badge badge-warning'><i class='icon-minus-sign'></i>QOS</span><ul>";
 							if(datos.results.datum[i].classes.length > 1){
 								for(var j=1; j<datos.results.datum[i].classes.length; j ++){

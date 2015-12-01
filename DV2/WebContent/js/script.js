@@ -161,8 +161,35 @@ function generateMenu(){
         	$(".menuCnoc").append("<li><a href='password.jsp'><i class='fa fa-fw fa-lock'></i> Change Password </a></li>");
         	
         	/** Load NMIS URLs **/
-			cnocConnector.invokeMashup(cnocConnector.nmis_urls, {},  function (datos) {
-				
+        	$( '#mpls_select_main' ).append(
+					'<option value="http://180.176.146.196/cgi-nmis8/access-santander.pl?">SUCURSALES</option>'
+				);
+        	$( '#mpls_select_main' ).append(
+					'<option value="http://180.176.146.203/cgi-nmis8/access-santander.pl?">CAJEROS </option>'
+				);
+        	
+        	$( '#internet_select_main' ).append(
+					'<option value="http://nmis-santander-sucursales.cnoc.telmexit.com:1058/cgi-nmis8/access-santander-sucursales.pl?">SUCURSALES</option>'
+				);
+        	
+        	$( '#mpls_select_main' ).chosen({allow_single_deselect : true}).change(function() {					
+				if ( $(this).val() != '' ) {
+					window.open( $(this).val() );
+				}
+			});
+        	
+        	$( '#internet_select_main' ).append(
+					'<option value="http://nmis-santander-cajeros.cnoc.telmexit.com:1055/cgi-nmis8/access-santander-cajeros.pl?">CAJEROS</option>'
+				);
+        	
+        	$( '#internet_select_main' ).chosen({allow_single_deselect : true}).change(function() {
+				if ( $(this).val() != '' ) {
+					window.open( $(this).val() );
+				}
+			});
+        	
+        	/*
+			cnocConnector.invokeMashup(cnocConnector.nmis_urls, {},  function (datos) {				
 				try {
 					if(datos.records.record.length>1) {
 						$.each(datos.records.record, function(k, v) {
@@ -193,9 +220,6 @@ function generateMenu(){
 								}							
 							}
 							if (v.url_nmis_internet != ''){
-								/*$( '#internet_select_main' ).append(
-									'<option value="' + v.url_nmis_internet + '">' + v.dept_name + '</option>'
-								);*/
 								
 								if (v.url_nmis_internet.indexOf("\n") > 0) {
 									var nmis = v.url_nmis_internet.split("\n");
@@ -305,16 +329,6 @@ function generateMenu(){
 								}					
 							});
 							
-							/*$( '#internet_select_main' ).append(
-								'<option value="' + datos.records.record.url_nmis_internet + '">' + datos.records.record.dept_name + '</option>'
-							);
-							
-							$( '#internet_select_main' ).chosen({allow_single_deselect : true}).change(function() {
-								if ( $(this).val() != '' ) {
-									window.open( $(this).val() );
-								}					
-							});*/
-						
 						} else {
 							$( '#internet_main' ).empty();
 						}
@@ -326,6 +340,7 @@ function generateMenu(){
 				}
 
 			},"","");
+			*/
         }
 	});
 }
