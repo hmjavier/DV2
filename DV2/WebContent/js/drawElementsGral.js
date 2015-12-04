@@ -13,7 +13,7 @@ var drawElementsGral = {
 		unreachableNodes : [],		
 		groups : [],
 		intTops:"",
-		
+		statesMX : "",
 		dataChartMemory : [],
 		
 		init : function(codeNet) {
@@ -610,7 +610,7 @@ var drawElementsGral = {
 			} else if (status === 'degraded') { // Draw degraded node list
 				//nodeList = nodeList.concat(drawElementsGral.degradedNodes);
 				//drawElementsGral.getNodesByStatus(status, cnocConnector.codeNetGlobal);
-				drawElementsGral.getListNodesDegraded();
+				drawElementsGral.getListNodesDegraded("");
 				//cnocConnector.invokeMashup(cnocConnector.service14, {"codenet" : cnocConnector.codeNetGlobal,"group":"","status":status},drawElementsGral.drawListNodesV1, "listNodes", "listNodesG");
 			
 			} else if (status === 'unreachable') { // Draw unreachable node list
@@ -620,133 +620,64 @@ var drawElementsGral = {
 			drawElementsGral.drawListNodes(nodeList, status, 'listNodes', 'listNodesG');
 			
 		
-		},getListNodesDegraded: function(){
+		},getListNodesDegraded: function(group){
 			
 			/*** Invoke NMIS Nodes by Status ***/
 			cnocFramework.invokeMashup({
 				invokeUrl : endpoint.getDegradedNodesList,
 				params : {
 					"networkCode" : cnocConnector.codeNetGlobal,
-					"flag" : "1"
+					"group" : group
 				},									
-				callback : drawElementsGral.drawListNodesDegraded,				
-				divContainers : [ $('#listNodes') ],
-				divElements : [ $('#listNodesG') ]
-			});
-			
-			
-		}, drawListNodesDegraded: function (datos, container, divTable) {
-			
-			
-			cnocFramework.invokeMashup({
-				invokeUrl : endpoint.getDegradedNodesList,
-				params : {
-					"networkCode" : cnocConnector.codeNetGlobal,
-					"flag" : "2"
-				},									
-				callback : function(datosSnmp, container, divTable){
-					
+				//callback : drawElementsGral.drawListNodesDegraded,
+				callback : function(datos, container, divtable){
+				
 					jQuery("#listNodes").empty();	
-					var tableT = "";
+					var tableT = "";	
 					
 					try {
-							if (datos.records.record.length > 1) {
-								for ( var i = 0; i < datos.records.record.length; i++) {
-									
-									tableT +=
-										"<tr class='warning'>" +
-											"<td><a href='#nodeResource'>"+datos.records.record[i].name.toString()+"</a></td>" +
-											"<td><a href='#nodeResource'>"+datos.records.record[i].event.toString()+"</a></td>" +
-											"<td><a href='#nodeResource'>"+datos.records.record[i].value_column.toString()+"</a></td>" +
-											"<td><a href='#nodeResource'>"+datos.records.record[i].element.toString()+"</a></td>" +						
-											"<td><a href='#nodeResource'>"+datos.records.record[i].updated.toString()+"</a></td>" +
-										"</tr>";
-								}
-							} else {
+						if (datos.records.record.length > 1) {
+							for ( var i = 0; i < datos.records.record.length; i++) {
+								
 								tableT +=
 									"<tr class='warning'>" +
-										"<td><a href='#nodeResource'>"+datos.records.record.name.toString()+"</a></td>" +
-										"<td><a href='#nodeResource'>"+datos.records.record.event.toString()+"</a></td>" +
-										"<td><a href='#nodeResource'>"+datos.records.record.value_column.toString()+"</a></td>" +
-										"<td><a href='#nodeResource'>"+datos.records.record.element.toString()+"</a></td>" +						
-										"<td><a href='#nodeResource'>"+datos.records.record.updated.toString()+"</a></td>" +
+										"<td><a href='#nodeResource'>"+datos.records.record[i].name.toString()+"</a></td>" +
+										"<td><a href='#nodeResource'>"+datos.records.record[i].event.toString()+"</a></td>" +
+										"<td><a href='#nodeResource'>"+datos.records.record[i].value_column.toString()+"</a></td>" +
+										"<td><a href='#nodeResource'>"+datos.records.record[i].element.toString()+"</a></td>" +						
+										"<td><a href='#nodeResource'>"+datos.records.record[i].updated.toString()+"</a></td>" +
 									"</tr>";
 							}
-							
-							/***********************************************************************************************/
-							/*  DATOS SNMP DOWN */
-							
-							if (datosSnmp.records.record.length > 1) {
-								for ( var i = 0; i < datosSnmp.records.record.length; i++) {
-									
-									tableT +=
-										"<tr class='warning'>" +
-											"<td><a href='#nodeResource'>"+datosSnmp.records.record[i].name.toString()+"</a></td>" +
-											"<td><a href='#nodeResource'>SNMP DOWN</a></td>" +
-											"<td><a href='#nodeResource'></a></td>" +
-											"<td><a href='#nodeResource'></a></td>" +						
-											"<td><a href='#nodeResource'></a></td>" +
-										"</tr>";
-								}
-							} else {
-								tableT +=
-									"<tr class='warning'>" +
-										"<td><a href='#nodeResource'>"+datosSnmp.records.record.name.toString()+"</a></td>" +
-										"<td><a href='#nodeResource'>SNMP DOWN</a></td>" +
-										"<td><a href='#nodeResource'></a></td>" +
-										"<td><a href='#nodeResource'></a></td>" +						
-										"<td><a href='#nodeResource'></a></td>" +
-									"</tr>";
-							}
-							
-							
-					
-					} catch (err) {
-						console.log(err);
-					};		
-					
-					var rowsHeaders = [
-						{ "sTitle" : "Node Name" },
-						{ "sTitle" : "Event" },
-						{ "sTitle" : "Value" },
-						{ "sTitle" : "Element" },
-						{ "sTitle" : "Updated" }
-					];
-					
-					cnocConnector.drawGrid("listNodes", "listNodesG", tableT, rowsHeaders, false);
-				},				
-				divContainers : [ $('#listNodes') ],
-				divElements : [ $('#listNodesG') ]
-			});
-			
-			/*jQuery("#" + container).empty();	
-			var tableT = "";
-			
-			try {
-				$.each(datos, function(k,v) {
-					tableT +=
-						"<tr class='warning'>" +
-							"<td><a href='#nodeResource'>"+v.name.toString()+"</a></td>" +
-							"<td><a href='#nodeResource'>"+v.event.toString()+"</a></td>" +
-							"<td><a href='#nodeResource'>"+v.value.toString()+"</a></td>" +
-							"<td><a href='#nodeResource'>"+v.element.toString()+"</a></td>" +						
-							"<td><a href='#nodeResource'>"+v.updated.toString()+"</a></td>" +
-						"</tr>";
-				});
+						} else {
+							tableT +=
+								"<tr class='warning'>" +
+									"<td><a href='#nodeResource'>"+datos.records.record.name.toString()+"</a></td>" +
+									"<td><a href='#nodeResource'>"+datos.records.record.event.toString()+"</a></td>" +
+									"<td><a href='#nodeResource'>"+datos.records.record.value_column.toString()+"</a></td>" +
+									"<td><a href='#nodeResource'>"+datos.records.record.element.toString()+"</a></td>" +						
+									"<td><a href='#nodeResource'>"+datos.records.record.updated.toString()+"</a></td>" +
+								"</tr>";
+						}
+						
 				
-			} catch (err) {
-				console.log(err);
-			};		
+				} catch (err) {
+					console.log(err);
+				};		
 			
-			var rowsHeaders = [
-				{ "sTitle" : "Node Name" },
-				{ "sTitle" : "Event" },
-				{ "sTitle" : "Value" },
-				{ "sTitle" : "Element" },
-				{ "sTitle" : "Updated" }
-			];
+				var rowsHeaders = [
+					{ "sTitle" : "Node Name" },
+					{ "sTitle" : "Event" },
+					{ "sTitle" : "Value" },
+					{ "sTitle" : "Element" },
+					{ "sTitle" : "Updated" }
+				];
+				
+				cnocConnector.drawGrid("listNodes", "listNodesG", tableT, rowsHeaders, false);
+					},
+					divContainers : [ $('#listNodes') ],
+					divElements : [ $('#listNodesG') ]
+				});
 			
-			cnocConnector.drawGrid(container, divTable, tableT, rowsHeaders, false);*/
 			
 		}, selectCustom : function(datos, selector, opt) {
 
@@ -768,7 +699,7 @@ var drawElementsGral = {
 		},mapaGeneral:function(codenet, typeData, flgNacional){
 			$( "#mapGral").mask("Waiting...");
 			var states = [];
-
+			
 			$.ajax({
 				type : 'GET',
 				dataType : 'jsonp',
@@ -779,8 +710,123 @@ var drawElementsGral = {
 					console.log(jqXHR);
 					$( "#mapGral").unmask();
 				},
-				success : function(response) {					
+				success : function(response) {	
+
 					var tmp = "";
+					if(response.results){
+						tmp = response.results.international.toString();
+					}else{
+						tmp = response.international.toString();
+					}					
+					
+					try{
+						if(tmp === "false" || flgNacional === true) {
+							$.each( response, function( key, val ) {
+								$.each( val, function( key, val ) {
+
+									var reachableT = 0;
+									var degradedT = 0;
+									var unreachableT = 0;
+									var color ="#22FF00";
+
+									$.each( val, function( key, val ) {
+
+										if(key.toString() === "reachable"){
+											reachableT = val;
+										}
+										
+										if(key.toString() === "degraded"){
+											degradedT = val;
+										}
+										
+										if(key.toString() === "unreachable"){
+											unreachableT = val;
+										}
+										
+										var totalN = parseInt(unreachableT) + parseInt(degradedT) + parseInt(reachableT);
+										
+										if(parseInt(unreachableT) >= 1){
+											color = "#FF1600";
+										}else if(parseInt(degradedT) >= 1){
+											color = "#FFE200";
+										}else {
+											color ="#22FF00";
+										}									
+									});
+
+									var data = {
+										"nameState" : key, 
+										"tooltip": "<b>"+key+" <br> Normal: "+reachableT+" <br> Warning: "+degradedT+"<br> Critical: "+unreachableT,
+										"color" : color,
+										"hc-key" : drawElementsGral.statesMX[key]
+									};
+
+									states.push(data);
+								});								
+							});
+						}
+					}catch(e){
+						console.log(e);
+					}
+					
+					// Initiate the chart
+				    $('#mapGral').highcharts('Map', {
+
+					    chart: {
+				                backgroundColor: {
+				                    linearGradient: { x1: 0, y1: 0, x2: 0, y2: 1 },
+			                        stops: [
+				                            [0, '#cddee4'],
+				                            [1, '#caf1f9']
+				                        ]
+				                    }
+			            },
+			            title:{
+			            	text : ""
+			            },
+				        subtitle : {
+				            //text : 'Source map: <a href="https://code.highcharts.com/mapdata/countries/mx/mx-all.js">Mexico</a>'
+				        },
+
+				        mapNavigation: {
+				            enabled: true,
+				            buttonOptions: {
+				                verticalAlign: 'bottom'
+				            }
+				        },
+				        credits: {
+			                enabled: false
+			            },
+				        colorAxis: {
+				            min: 0
+				        },
+				        legend: {
+				            enabled: false
+				        },
+				        series : [{
+				            data : states,
+				            //mapData: Highcharts.maps['countries/mx/mx-all'],
+				            mapData: mexico, 
+				            joinBy: 'hc-key',
+				            name: 'Node Status',
+				            states: {
+				                hover: {
+				                    color: '#BADA55'
+				                }
+				            },
+				            dataLabels: {
+				                enabled: true,
+				                format: '{point.nameState}'
+				                //format: '{point.title}'
+				                
+				            },
+				            tooltip: {
+			                    pointFormat: '{point.tooltip}'
+			                }
+				        }]
+				    });
+					
+					/*var tmp = "";
 					if(response.results){
 						tmp = response.results.international.toString();
 					}else{
@@ -1029,7 +1075,7 @@ var drawElementsGral = {
 						}
 					}catch(e){
 						console.log(e);
-					}
+					}*/
 					$( "#mapGral").unmask();
 				}
 			});
@@ -1248,12 +1294,12 @@ var drawElementsGral = {
 							click : function(event) {
 								if (event.point.series.name === "Normal") {
 									status = "reachable";
-								} else if (event.point.series.name === "Warning") {
+								} else if (event.point.series.name === "Warning") {									
 									status = "degraded";
+									drawElementsGral.getListNodesDegraded("and n.group_column = '"+event.point.category+"'");
 								} else if (event.point.series.name === "Critical") {
 									status = "unreachable";
-								}
-								drawElementsGral.getListNodesDegraded();
+								}								
 								//cnocConnector.invokeMashup(cnocConnector.service14, {"codenet" : cnocConnector.codeNetGlobal,"group":event.point.category,"status":status},drawElementsGral.drawListNodesV1, "listNodes", "listNodesG");
 							}
 						}
@@ -2174,5 +2220,5 @@ var drawElementsGral = {
 		  var sec = a.getSeconds();
 		  var time = date + ' ' + month + ' ' + year + ' ' + hour + ':' + min + ':' + sec ;
 		  return time;
-		}
+	}
 };
