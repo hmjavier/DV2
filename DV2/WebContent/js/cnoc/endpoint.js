@@ -18,6 +18,9 @@ var endpoint = {
 					endpoint.getfilters = endpoint.main + data.getfilters;
 					endpoint.getIncidents = endpoint.main + data.getIncidents;
 					endpoint.getActivities = endpoint.main + data.getActivities;
+					endpoint.getListChangesCalendar = endpoint.main + data.getListChangesCalendar;
+					endpoint.getDataChangesCalendar = endpoint.main + data.getDataChangesCalendar;
+					endpoint.getGestionCliente = endpoint.main + data.getGestionCliente;
 				},
 				error : function(jqXHR, textStatus, errorThrown) {
 					console.log("Can't load 'endpoint.json'");
@@ -46,7 +49,7 @@ var endpoint = {
 					endpoint.getListNodesIpFlow = endpoint.main + data.getListNodesIpFlow;
 					endpoint.getDegradedNodesList = endpoint.main + data.getDegradedNodesList;
 					endpoint.getTicketsRangeTime = endpoint.main + data.getTicketsRangeTime;
-					endpoint.getWarningByGroup = endpoint.main + data.getWarningByGroup;
+					endpoint.getWarningByGroup = endpoint.main + data.getWarningByGroup;									
 				},
 				error : function(jqXHR, textStatus, errorThrown) {
 					console.log("Can't load 'endpoint.json'");

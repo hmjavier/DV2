@@ -18,6 +18,10 @@
 "getNetworkCodes" : "/presto/edge/api/rest/ms_getNetworkCodes/Invoke?x-presto-resultFormat=json",
 "getfilters" : "/presto/edge/api/rest/ms_se_ci_filter/Invoke?x-presto-resultFormat=json",
 "getIncidents" : "/presto/edge/api/rest/ms_se_incidents/Invoke?x-presto-resultFormat=json",
-"getActivities" : "/presto/edge/api/rest/ms_se_activities/Invoke?x-presto-resultFormat=json"
+"getActivities" : "/presto/edge/api/rest/ms_se_activities/Invoke?x-presto-resultFormat=json",
+"getListChangesCalendar": "/presto/edge/api/rest/ms_list_calendar_changes/Invoke?x-presto-resultFormat=json",
+"getDataChangesCalendar": "/presto/edge/api/rest/ms_data_calendar_changes/Invoke?x-presto-resultFormat=json",
+"getGestionCliente" : "/presto/edge/api/rest/ms_gestion_cliente/Invoke?x-presto-resultFormat=json"
+
 
 }
