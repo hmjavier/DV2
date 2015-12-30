@@ -1,5 +1,5 @@
 /*
- Highcharts JS v4.1.9 (2015-10-07)
+ Highmaps JS v1.1.9 (2015-10-07)
  Exporting module
 
  (c) 2010-2014 Torstein Honsi

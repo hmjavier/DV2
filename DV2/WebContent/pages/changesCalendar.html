@@ -9,9 +9,9 @@
 	<!-- Bootstrap 3.3.4 -->
 	<link href="../bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
 	<!-- Font Awesome Icons -->
-	<link href="../font-awesome-4.1.0/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+	<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
 	<!-- Ionicons -->
-	<link href="../css/ionicons.min.css" rel="stylesheet" type="text/css" />
+	<link href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css" rel="stylesheet" type="text/css" />
 	<!-- daterange picker -->
 	<link href="../plugins/daterangepicker/daterangepicker-bs3.css" rel="stylesheet" type="text/css" />
 	<!-- Theme style -->
@@ -42,6 +42,11 @@
 		<script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
 		<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 	<![endif]-->
+	
+	<!-- CALENDAR -->
+	<link href="../plugins/fullcalendar/fullcalendar.min.css" rel="stylesheet" type="text/css" />
+	<link href="../plugins/fullcalendar/fullcalendar.print.css" rel="stylesheet" media='print'  />
+	<link href="../plugins/fullcalendar/scheduler.min.css" rel="stylesheet" type="text/css" />
 	
 	<!-- Page-Level Styles -->
 	<style type="text/css">
@@ -110,12 +115,12 @@
 			<!-- Content Header (Page header) -->
 			<section class="content-header">
 				<h1>
-					Incident Management <small>Search</small>
+					Changes Calendar
 				</h1>
 				<ol class="breadcrumb">
 					<li><a href="../main.jsp"><i class="fa fa-home"></i> Home</a></li>
-					<li><a href="../incidents.jsp"><i class="fa fa-warning"></i> Incidents</a></li>
-					<li class="active"><i class="fa fa-search"></i> Advanced Search</li>
+					<li><a href="../incidents.jsp"><i class="fa fa-warning"></i> Changes</a></li>
+					<li class="active"><i class="fa fa-search"></i> Calendar</li>
 				</ol>
 			</section>
 
@@ -130,244 +135,78 @@
 									<i class="fa fa-minus"></i>
 								</button>
 							</div>
+							<div class="box-body">
+								<table style="width: 30%;">
+									<tr>
+										<td>
+											<select id="categoryChange" data-placeholder="Choose a Category..." style="width: 100%;">
+										 		<option value=""></option>
+											  	<option value="NORMAL">NORMAL</option>
+											  	<option value="EMERGENCY">EMERGENCY</option>
+											  	<option value="STANDARD">STANDARD</option>
+											</select>
+										</td>
+										<td>
+											<select id="sectorChange" data-placeholder="Choose a Sector..." style="width: 100%;">
+										 		<option value=""></option>
+											  	<option value="INTERNATIONAL">INTERNATIONAL</option>
+											  	<option value="INDUSTRY">INDUSTRY</option>
+											  	<option value="GOVERNMENT">GOVERNMENT</option>
+											  	<option value="FINANCIAL">FINANCIAL</option>
+											  	<option value="CNOC">CNOC</option>
+											</select>
+										</td>
+									</tr>
+								</table>									
+							</div>
 					</div>
 					<!-- /.box-header -->
-					<form id="search_form">
-						<div class="box-body">						
-							<div class="row">
-								<div class="col-md-4">
-									<div class="form-group" id=im>
-										<label>Incident ID:</label>
-										<div class="input-group">
-											<div class="input-group-addon">
-												<i class="fa fa-ticket"></i>
-											</div>
-											<input type="text" class="form-control"
-												id="im_input"
-												placeholder="IMABC000000" />
-										</div>
-										<!-- /.input group -->									
-									</div>
-									<!-- /.form group -->
-									<div class="form-group" id="ci_name">
-										<label>CI name:</label>
-										<div class="input-group">
-											<div class="input-group-addon">
-												<i class="fa fa-hdd-o"></i>
-											</div>
-											<select class="form-control js-example-responsive"
-													id="ci_name_input" data-placeholder="Device name">
-												<option></option>
-											</select>										
-										</div>
-										<!-- /.input group -->
-									</div>
-									<!-- /.form group -->
-									<div class="form-group" id="location">
-										<label>Location:</label>
-										<div class="input-group">
-											<div class="input-group-addon">
-												<i class="fa fa-globe"></i>
-											</div>
-											<select class="form-control js-example-responsive"
-													id="location_input" data-placeholder="Location name">
-												<option></option>
-											</select>										
-										</div>
-										<!-- /.input group -->
-									</div>
-									<!-- /.form group -->
-									<div class="form-group" id=im>
-										<label>Customer Ticket:</label>
-										<div class="input-group">
-											<div class="input-group-addon">
-												<i class="fa fa-ticket"></i>
-											</div>
-											<input type="text" class="form-control"
-												id="customer_reference_input"
-												placeholder="Customer Ticket" />
-										</div>
-										<!-- /.input group -->
-									</div>
-									<!-- /.form group -->
-								</div>
-								<!-- /.col -->
-								<div class="col-md-4">
-									<!-- Date range -->
-									<div class="form-group" id="range">
-										<label>Date range:</label>
-										<div class="input-group">
-											<div class="input-group-addon">
-												<i class="fa fa-calendar"></i>
-											</div>
-											<input type="text" class="form-control pull-right"
-												id="range_input" />
-										</div>
-										<!-- /.input group -->
-									</div>
-									<!-- /.form group -->								
-									<div class="form-group" id="ci">
-										<label>Unique ID:</label>
-										<div class="input-group">
-											<div class="input-group-addon">
-												<i class="fa fa-hdd-o"></i>
-											</div>
-											<select class="form-control js-example-responsive"
-													id="unique_id_input" data-placeholder="Configuration Item">
-												<option></option>
-											</select>										
-										</div>
-										<!-- /.input group -->
-									</div>
-									<!-- /.form group -->
-									<div class="form-group" id="location_code">
-										<label>Location Code:</label>
-										<div class="input-group">
-											<div class="input-group-addon">
-												<i class="fa fa-globe"></i>
-											</div>
-											<select class="form-control js-example-responsive"
-													id="location_code_input" data-placeholder="Location Code">
-												<option></option>
-											</select>										
-										</div>
-										<!-- /.input group -->
-									</div>
-									<!-- /.form group -->
-									<div class="form-group" id=im>
-										<label>Vendor Ticket:</label>
-										<div class="input-group">
-											<div class="input-group-addon">
-												<i class="fa fa-ticket"></i>
-											</div>
-											<input type="text" class="form-control"
-												id="vendor_ticket_input"
-												placeholder="Vendor Ticket" />
-										</div>
-										<!-- /.input group -->									
-									</div>
-									<!-- /.form group -->
-								</div>							
-								<!-- /.col -->
-								<div class="col-md-4">
-									<div class="form-group" id="status">
-										<label>Status:</label><select
-											class="form-control js-example-responsive" id="status_input"
-											multiple="multiple" data-placeholder="Select Status">
-											<option>OPEN</option>
-											<option>CATEGORIZE</option>
-											<option>WORK IN PROGRESS</option>
-											<option>PENDING CUSTOMER</option>
-											<option>PENDING EVIDENCE</option>
-											<option>PENDING VENDOR</option>
-											<option>PENDING OTHER</option>
-											<option>SUSPENDED</option>
-											<option>RESOLVED</option>
-											<option>Closed</option>
-										</select>
-									</div>
-									<!-- /.form-group -->
-									<div class="form-group" id="group">
-										<label>Group:</label><select
-											class="form-control js-example-responsive" id="group_input"
-											multiple="multiple" data-placeholder="Group name">
-											<option></option>
-										</select>										
-									</div>
-									<!-- /.form group -->
-									<div class="form-group" id="state">
-										<label>Location State:</label>
-										<div class="input-group">
-											<div class="input-group-addon">
-												<i class="fa fa-globe"></i>
-											</div>
-											<select class="form-control js-example-responsive"
-													id="state_input" data-placeholder="Location State">
-												<option></option>
-											</select>										
-										</div>
-										<!-- /.input group -->
-									</div>
-									<!-- /.form group -->
-								</div>
-								<!-- /.col -->
-							</div>
-							<!-- /.row -->
-						</div>
-						<!-- /.box-body -->
-						<div class="box-footer">
-							<button type="button" class="btn btn-default" style="margin-right: 5px;" id="pdf_btn"><i class="fa fa-file-pdf-o"></i> PDF</button>
-							<button type="button" class="btn btn-default" style="margin-right: 5px;" id="excel_btn"><i class="fa fa-file-excel-o"></i> Excel</button>
-							<button type="submit" class="btn btn-primary pull-right">Search</button>
-						</div>
-						<!-- /.box-footer -->
-					</form>
+
 				</div>
-				<!-- /.box -->
-				
-				<!-- INCIDENT LIST -->
 				<div class="box box-primary">
 					<div class="box-header with-border">
-						<h3 class="box-title">Incidents List</h3>
-						<div class="box-tools pull-right">
-							<button class="btn btn-box-tool" data-widget="collapse">
-								<i class="fa fa-minus"></i>
-							</button>							
-						</div>
+						<h3 class="box-title">Calendar</h3>
+							<div class="box-tools pull-right">
+								<button class="btn btn-box-tool" data-widget="collapse">
+									<i class="fa fa-minus"></i>
+								</button>
+							</div>
+							<div class="box-body">	
+								<div id="calendar"></div>
+							</div>
 					</div>
 					<!-- /.box-header -->
-					<div class="box-body" id="incidentList">
-						<table id="incidentsTable" class="table table-bordered table-striped"></table>
-					</div>
-					<!-- /.box-body -->
+
 				</div>
 				<!-- /.box -->
-				
-				<!-- INCIDENT ACTIVITIES -->
-				<div class="box box-primary">
-					<div class="box-header">
-						<h3 class="box-title">Activities</h3>
-						<div class="box-tools pull-right">
-							<button class="btn btn-box-tool" data-widget="collapse">
-								<i class="fa fa-minus"></i>
-							</button>
-						</div>
-					</div>
-					<!-- /.box-header -->
-					<div class="box-body" id="activitiesList">
-						<table id="activitiesTable" class="table table-bordered table-striped"></table>
-					</div>
-					<!-- /.box-body -->
-				</div>
-				<!-- /.box -->
+
 			</section>
 			<!-- /.content -->
 		</div>
 		<!-- /.content-wrapper -->		
 		<footer class="main-footer"></footer>
-		<!-- Modals -->
-		<div class="modal modal-info" id="info_modal">
-			<div class="modal-dialog">
-				<div class="modal-content">
-					<div class="modal-header">
-						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-						<h4 class="modal-title">Incidents</h4>
-					</div>
-					<div class="modal-body">
-						<p id="modal_body">No data available in table</p>
-					</div>
-					<div class="modal-footer">						
-						<button type="button" class="btn btn-outline" data-dismiss="modal">Close</button>
-					</div>
-				</div><!-- /.modal-content -->
-			</div><!-- /.modal-dialog -->
-		</div><!-- /.modal -->
+
 	</div>
 	<!-- ./wrapper -->
 	
-	<div id="pdf_out"></div>
-	<!-- ./wrapper -->
-
+	<!-- Modals -->
+		<div class="modal " id="info_modal">
+			<div class="modal-dialog">
+				<div class="modal-content" style="border-radius: 6px;">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+						<h4 class="modal-title"></h4>
+					</div>
+					<div class="modal-body">
+						<p id="modal_body"></p>
+					</div>
+					<!--<div class="modal-footer">						
+						<button type="button" class="btn btn-outline" data-dismiss="modal">Close</button>
+					</div>-->
+				</div><!-- /.modal-content -->
+			</div><!-- /.modal-dialog -->
+		</div><!-- /.modal -->
+		
 	<!-- jQuery 2.1.4 -->
 	<script src="../plugins/jQuery/jQuery-2.1.4.min.js" type="text/javascript"></script>
 	<!-- Bootstrap 3.3.2 JS -->
@@ -392,14 +231,20 @@
 	<!-- CNOC Framework -->
 	<script src="../js/cnoc/cnocFramework.js"></script>
 	<!-- CNOC Search Engine -->
-	<script src="../js/cnoc/search.js"></script>
+	<script src="../js/cnoc/changesCalendar.js"></script>
 	<!-- Navigation Bar -->
 	<script src="../js/cnoc/navigation.js"></script>
 	<!-- Kendo IU -->    
-    <script src="../plugins/kendo/jszip.min.js"></script>
-    <script src="../plugins/kendo/kendo.all.min.js"></script>
+    <script src="https://kendo.cdn.telerik.com/2015.3.930/js/jszip.min.js"></script>
+    <script src="https://kendo.cdn.telerik.com/2015.3.930/js/kendo.all.min.js"></script>
     <!-- Load Pako ZLIB library to enable PDF compression -->
-    <script src="../plugins/kendo/pako.min.js"></script>	
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pako/0.2.8/pako.min.js"></script>	
+    
+    
+    <!-- calendar -->
+    <script src="../plugins/fullcalendar/moment.min.js"></script>	
+    <script src="../plugins/fullcalendar/fullcalendar.min.js"></script>    
+    <script src="../plugins/fullcalendar/scheduler.min.js"></script>
     
     <script>
 		// Import DejaVu Sans font for embedding
@@ -418,21 +263,34 @@
 	<script>
 	    $(document).ready(function() {
 	    	
-	    	/**** Hide pdf layout ***/
-	    	$( '#pdf_out' ).hide();	    	
-	    	
 			/*** Load Enpoints services ***/
 			endpoint.getSearchProperties();
 	    	
 			/*** Load Navigation Bar & Init function ***/
 			navigation.loadUser();			
-			navigation.getNetworkCodes(search.init);	    	
+			navigation.getNetworkCodes(changesCalendar.init);	    	
 	    		        
 			/*** Load footer ***/
 			$( ".main-footer" ).load( "footer.html" );			
 	        
 			// Initialize Select Element
 			$("#status_input").chosen();
+			// Initialize Select Element
+			
+			$("#categoryChange").chosen({
+				allow_single_deselect : true
+			}).change(function() {
+
+				changesCalendar.getChanges();	
+				
+			});
+			$("#sectorChange").chosen({
+				allow_single_deselect : true
+			}).change(function() {
+				
+				changesCalendar.getChanges();
+				
+			});			
 			
 			// Date range picker
 			$('#range_input').daterangepicker({
@@ -448,8 +306,8 @@
 			});
 			
 			/*** Add Listeners ***/
-			search.addlisteners();
-			
+			changesCalendar.renderCalendar();
+
 	    });
     </script>
 

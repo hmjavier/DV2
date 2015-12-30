@@ -32,7 +32,7 @@ var cnocConnector = {
 						var ce = response.PrestoResponse.PrestoError.ErrorDetails.code;
 						if (ce == 401) {
 							alert("Insuficientes Prvilegios");
-							window.location = "/dashboard/index.html";
+							window.location = "/dashboardSantander/index.html";
 						}
 					} catch (err) {
 						callback(response, divcontainer, divelements);
@@ -57,7 +57,7 @@ var cnocConnector = {
 				statusCode : {
 					401 : function() {
 						alert('Session Time Out');
-						window.location = "/dashboard/index.html";
+						window.location = "/dashboardSantander/index.html";
 					}
 				},
 				error : function(jqXHR, textStatus, errorThrown) {
@@ -71,7 +71,7 @@ var cnocConnector = {
 						var ce = response.PrestoResponse.PrestoError.ErrorDetails.code;
 						if (ce == 401) {
 							alert("Insuficientes Prvilegios");
-							window.location = "/dashboard/index.html";
+							window.location = "/dashboardSantander/index.html";
 						}
 					} catch (err) {
 						callback(response, divcontainer,divelements);

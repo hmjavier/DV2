@@ -814,9 +814,15 @@
 	<!-- CNOC Framework -->
 	<script src="js/cnoc/cnocFramework.js"></script>
 	
-	<!-- higcharts -->
+	<!-- higcharts and highMaps -->
+	
 	<script type="text/javascript" src="js/highcharts.js"></script>
-	<script type="text/javascript" src="js/exporting.js"></script>
+	<!--<script type="text/javascript" src="js/exporting.js"></script>-->
+	
+	<script src="js/highmap/highmaps.js"></script>
+	<script src="js/highmap/modules/exporting.js"></script>
+	<script src="js/highmap/mx.js"></script>
+	<script src="js/highmap/statesMx.js"></script>
 	
 	<!-- jQuery Loadmask -->
 	<script src="js/jquery-loadmask-0.4/jquery.loadmask.min.js"></script>
@@ -891,6 +897,10 @@
 		
 		 	//$( "#sortableLeft" ).sortable({revert: true});
 		 	
+		 	/*getStatesKeyMX*/
+		 	
+		 	drawElementsGral.statesMX = states;
+		 	
 			/*Genera Menu*/
 			generateMenu();
 		 	
@@ -898,22 +908,22 @@
 		 	
 		 	$('#countAll').click(function() {
 		 		/*** Draw complete node list ***/
-				drawElementsGral.listNodes('complete');
+				drawElementsGral.listNodes('complete', null);
 			});
 		 	
 		 	$('#countReachable').click(function() {
 		 		/*** Draw complete node list ***/
-		 		drawElementsGral.listNodes('reachable');
+		 		drawElementsGral.listNodes('reachable', null);
 			});
 	
 		 	$('#countDegraded').click(function() {
 		 		/*** Draw complete node list ***/
-		 		drawElementsGral.listNodes('degraded');
+		 		drawElementsGral.listNodes('degraded', null);
 			});
 		 	
 		 	$('#countUnreachable').click(function() {
 		 		/*** Draw complete node list ***/
-		 		drawElementsGral.listNodes('unreachable');
+		 		drawElementsGral.listNodes('unreachable', null);
 			});
 			
 		 	

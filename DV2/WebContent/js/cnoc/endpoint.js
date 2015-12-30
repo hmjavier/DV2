@@ -18,6 +18,9 @@ var endpoint = {
 					endpoint.getfilters = endpoint.main + data.getfilters;
 					endpoint.getIncidents = endpoint.main + data.getIncidents;
 					endpoint.getActivities = endpoint.main + data.getActivities;
+					endpoint.getListChangesCalendar = endpoint.main + data.getListChangesCalendar;
+					endpoint.getDataChangesCalendar = endpoint.main + data.getDataChangesCalendar;
+					endpoint.getGestionCliente = endpoint.main + data.getGestionCliente;
 				},
 				error : function(jqXHR, textStatus, errorThrown) {
 					console.log("Can't load 'endpoint.json'");
