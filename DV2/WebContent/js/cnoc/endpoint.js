@@ -49,7 +49,7 @@ var endpoint = {
 					endpoint.getListNodesIpFlow = endpoint.main + data.getListNodesIpFlow;
 					endpoint.getDegradedNodesList = endpoint.main + data.getDegradedNodesList;
 					endpoint.getTicketsRangeTime = endpoint.main + data.getTicketsRangeTime;
-					endpoint.getWarningByGroup = endpoint.main + data.getWarningByGroup;
+					endpoint.getWarningByGroup = endpoint.main + data.getWarningByGroup;									
 				},
 				error : function(jqXHR, textStatus, errorThrown) {
 					console.log("Can't load 'endpoint.json'");

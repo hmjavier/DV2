@@ -642,7 +642,14 @@ var drawElementsGral = {
 				params : {
 					"networkCode" : cnocConnector.codeNetGlobal,
 					"group" : group
+<<<<<<< HEAD
 				}, callback : function(datos, container, divtable) {
+=======
+				},									
+				//callback : drawElementsGral.drawListNodesDegraded,
+				callback : function(datos, container, divtable){
+				
+>>>>>>> refs/remotes/origin/dashboardSantander
 					jQuery("#listNodes").empty();	
 					var tableT = "";	
 					
@@ -721,7 +728,12 @@ var drawElementsGral = {
 					console.log(jqXHR);
 					$( "#mapGral").unmask();
 				},
+<<<<<<< HEAD
 				success : function(response) {
+=======
+				success : function(response) {	
+
+>>>>>>> refs/remotes/origin/dashboardSantander
 					var tmp = "";
 					if(response.results){
 						tmp = response.results.international.toString();
@@ -1304,14 +1316,23 @@ var drawElementsGral = {
 							click : function(event) {
 								if (event.point.series.name === "Normal") {
 									status = "reachable";
+<<<<<<< HEAD
 									drawElementsGral.listNodes(status, event.point.category);
 								} else if (event.point.series.name === "Warning") {
+=======
+								} else if (event.point.series.name === "Warning") {									
+>>>>>>> refs/remotes/origin/dashboardSantander
 									status = "degraded";
 									drawElementsGral.getListNodesDegraded("and n.group_column = '"+event.point.category+"'");
 								} else if (event.point.series.name === "Critical") {
 									status = "unreachable";
+<<<<<<< HEAD
 									drawElementsGral.listNodes(status, event.point.category);
 								}
+=======
+								}								
+								//cnocConnector.invokeMashup(cnocConnector.service14, {"codenet" : cnocConnector.codeNetGlobal,"group":event.point.category,"status":status},drawElementsGral.drawListNodesV1, "listNodes", "listNodesG");
+>>>>>>> refs/remotes/origin/dashboardSantander
 							}
 						}
 					},
