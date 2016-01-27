@@ -164,7 +164,7 @@
 						ContainsAtLeastOneLowerCase: true,
 						ContainsAtLeastOneSpecialCharacter: true,
 						notEqualValues: true,
-						NoBrackets: /[\[\]\{\}]/,						
+						NoBrackets: /[\[\]\{\}]/,
 						NoSingleQuotes: /[']/
 					},
 					retypedPassword: {

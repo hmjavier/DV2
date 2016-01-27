@@ -32,7 +32,7 @@ var cnocConnector = {
 						var ce = response.PrestoResponse.PrestoError.ErrorDetails.code;
 						if (ce == 401) {
 							alert("Insuficientes Prvilegios");
-							window.location = "/dashboard/index.html";
+							window.location = "/dashboardDHL/index.html";
 						}
 					} catch (err) {
 						callback(response, divcontainer, divelements);
@@ -45,7 +45,7 @@ var cnocConnector = {
 			$( "#" + divcontainer ).unmask();
 		}
 	},
-	*/	
+	*/
 	invokeMashup : function(invokeUrl, params, callback, divcontainer, divelements) { //***** PROD *****
 		$( "#" + divcontainer ).mask("Waiting...");
 		try {
@@ -383,6 +383,11 @@ var cnocConnector = {
 					cnocConnector.invokeMashup(cnocConnector.service24, {"node" : id, "codenet" : cnocConnector.codeNetGlobal},drawElementsGral.drawGetModel, "listNodeDetail", "listNodeDetailG");
 					cnocConnector.invokeMashup(cnocConnector.service22, {"hostname" : id,"code_net":cnocConnector.codeNetGlobal},drawElementsGral.countTotal, "relatedIncidentsC", "relatedIncidentsCG");
 					cnocConnector.invokeMashup(cnocConnector.service23, {"hostname" : id,"code_net":cnocConnector.codeNetGlobal},drawElementsGral.countTotal, "relatedChangesC", "relatedChangesCG");
+					
+					/*GET TICKET RANGE*/
+					var date = new Date().getFullYear()+"-"+(new Date().getMonth()+1)+"-"+new Date().getDate();
+					
+					drawElementsPerformance.getTicketrange(cnocConnector.codeNetGlobal, date, null, id);
 					
 					/*** Validate if IP Accounting should be enabled ***/
 					cnocConnector.invokeMashup(
@@ -967,20 +972,31 @@ var cnocConnector = {
 	},drawSelect : function(datos, container, module) {
 
 		if (datos.records.record.length > 1) {
+			
+			var all = "IN (";
+			
+			$.each(datos.records.record, function(k,v) {
+				all = all + "'" + v.network_code + "'" + ",";
+			});			
+			
+			all = all.slice(0, all.length-1)+")"
+			
+			$("#" + container).append(
+					'<option rel="all" value="'	+ all + '">Select all</option>');
 
 			for ( var i = 0; i < datos.records.record.length; i++) {
 				jQuery("#" + container).append(
-						"<option rel='"+datos.records.record[i].dept_name.toString()+"' value='"
-								+ datos.records.record[i].network_code.toString() + "'>"
+						'<option rel="'+datos.records.record[i].dept_name.toString() + '" value="'
+								+ " = '" + datos.records.record[i].network_code.toString() + "'" + '">'
 								+ datos.records.record[i].dept_name.toString()
-								+ "</option>");
+								+ '</option>');
 			}
 		} else {
 			jQuery("#" + container).append(
-					"<option rel='"+datos.records.record.dept_name.toString()+"' value='"
-							+ datos.records.record.network_code.toString()
-							+ "'>" + datos.records.record.dept_name.toString()
-							+ "</option>");
+					'<option rel="'+datos.records.record.dept_name.toString()+'" value="'
+							+ "= '" + datos.records.record.network_code.toString() + "'" + '">'
+							+ datos.records.record.dept_name.toString()
+							+ '</option>');
 
 		}
 
@@ -1054,6 +1070,7 @@ var cnocConnector = {
 
         		}else{
             		$('option:selected', $('#'+container)).each(function() {
+
             			var data = $(this).val().split("|");
             			var name = data[0].toUpperCase();
             			var nmis = data[1];
@@ -1070,6 +1087,9 @@ var cnocConnector = {
             			drawElementsPerformance.startDate = startDate;
             			drawElementsPerformance.qosIn = false;
             			
+            			/*GET TOCKETS RANGE*/
+            			var date = new Date().getFullYear()+"-"+(new Date().getMonth()+1)+"-"+new Date().getDate();
+            			drawElementsPerformance.getTicketrange(cnocConnector.codeNetGlobal, date, null, name);
             			
             			if(model === 'PingOnly'){
             				drawElementsPerformance.selectPingOnly();
@@ -1102,7 +1122,32 @@ var cnocConnector = {
             						},function(data){							
             							for(var x=0; x<data.length; x++){
             								if(data[x].name==="cbqos-in"){
+            									
             									drawElementsPerformance.qosIn = true;
+            									
+            								}else if(data[x].name==="bgpPeer"){
+            									cnocConnector.invokeMashup(cnocConnector.service1, {
+                        							"endpoint" : "http://"+nmis+"/omk/opCharts/nodes/"+name+"/resources/bgpPeer/indicies",
+                        							"ip":nmis
+                        						},function(data){		
+
+                        							//drawElementsPerformance.idResourceInterfaz = data.results.datum.value;
+                        							
+                        							var tree = "<ul><li><span class='treeNode badge badge-success'><i class='icon-minus-sign'></i> BGPPeer </span><ul>";
+                        							tree += "<li id='"+data.results.datum.value+"' class='bgpPeer'><span class='treeNode'><i class='icon-minus-sign'><a title='"+data.results.datum.name+"' href='#nodeChart'>"+data.results.datum.tokens[0]+"--"+data.results.datum.tokens[1]+"...</a></i></span></li>";
+                        							tree += "</ul></li>";
+                        							tree += "<ul>";
+                        							
+                        							
+                        							$("#treeNodeDetailInterfaz").append(tree);
+                        							
+                        							$( ".bgpPeer" ).click(function() {
+                        								drawElementsPerformance.idResourceInterfaz = $(this).attr( 'id' );
+                        								drawElementsPerformance.drawBgp();
+                        							});
+                        							
+                        							
+                        						}, null, null);
             								}
             							}
             						}, null, null);
@@ -1189,6 +1234,7 @@ var cnocConnector = {
 				var nmis = data[1];
 				var vendor = data[2];
 				drawElementsPerformanceGraph.nmis = nmis;
+				drawElementsPerformanceGraph.nodeNameP = name;
 				
 				if(vendor === "HuaweiRouter" && metric === "qos"){
 					cnocConnector.invokeMashup(cnocConnector.service1, {

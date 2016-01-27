@@ -13,7 +13,7 @@ var drawElementsGral = {
 		unreachableNodes : [],		
 		groups : [],
 		intTops:"",
-		
+		statesMX : "",
 		dataChartMemory : [],
 		
 		init : function(codeNet) {
@@ -28,12 +28,15 @@ var drawElementsGral = {
 			}
 
 		},builder: function(codenet) {
-		
+
 			if(cnocConnector.codeNetGlobal === 'N000030') // If Banorte then draw National Map
 				this.mapaGeneral(codenet,"NACIONAL", true);
-			else
-				this.mapaGeneral(codenet, null ,false);
-			
+			else {
+				if (codenet.indexOf('(')>=0) // If Select all
+					this.mapaGeneral(codenet, null ,false, "true");
+				else
+					this.mapaGeneral(codenet, null ,false);
+			}
 			
 			/*** GRUPOS DEL CLIENTE  ***/
 			//cnocConnector.invokeMashup(cnocConnector.service12, {"codenet" : codenet},drawElementsGral.chartGroups, "chartGrupos", "chartGruposG");
@@ -44,6 +47,59 @@ var drawElementsGral = {
 			cnocConnector.invokeMashup(cnocConnector.service5, {"code_net" : codenet},drawElementsGral.countTotal, "cOpen", "cOpenG");
 			cnocConnector.invokeMashup(cnocConnector.service15, {"code_net" : codenet},drawElementsGral.countTotal, "cIncident", "cIncidentG");						
 
+			/* get Warning  by Group*/
+			cnocFramework.invokeMashup({
+				invokeUrl : endpoint.getWarningByGroup,
+				params : { "codenet" : codenet },
+				callback : function(response, divContainers, divElements) {
+					divContainers[0].empty();
+					divContainers[0].append(
+						'<table class="table table-striped">' +
+							'<thead>' +
+								'<tr>' +
+									'<th>Group</th>' +
+									'<th>Proactive Interface Availability</th>' +
+									'<th>Proactive Interface Input Utilisation</th>' +
+									'<th>Proactive Interface Output Utilisation</th>' +
+									'<th>Proactive Reachability</th>' +
+									'<th>Proactive Response Time</th>' +
+									'<th>UPS en Modo Bateria</th>' +
+									'<th>Proactive Interface Error Input Packets</th>' +
+									'<th>Proactive Interface Error Output Packets</th>' +
+									'<th>BGP Peer Down</th>' +
+									'<th>Proactive CPU</th>' +
+									'<th>Proactive Interface Discards Input Packets</th>' +
+									'<th>Proactive Interface Discards Output Packets</th>' +
+									'<th>Proactive Memory Free</th>' +
+									'<th>Proactive Dead Modem</th>' +
+								'</tr>' +
+							'</thead>' +
+						'</table>');
+					
+					$.each(response.records.record, function(k, v) {
+						$( divContainers[0].selector + ' > table').append(
+							'<tr>' +
+								'<td>' + v.group_column +  '</td>' +
+								'<td>' + v.proactive_interface_availability +  '</td>' +
+								'<td>' + v.proactive_interface_input_utilisation +  '</td>' +
+								'<td>' + v.proactive_interface_output_utilisation +  '</td>' +
+								'<td>' + v.proactive_reachability +  '</td>' +
+								'<td>' + v.proactive_response_time +  '</td>' +
+								'<td>' + v.ups_en_modo_bateria +  '</td>' +
+								'<td>' + v.proactive_interface_error_input_packets +  '</td>' +
+								'<td>' + v.proactive_interface_error_output_packets +  '</td>' +
+								'<td>' + v.bgp_peer_down +  '</td>' +
+								'<td>' + v.proactive_cpu +  '</td>' +
+								'<td>' + v.proactive_interface_discards_input_packets +  '</td>' +
+								'<td>' + v.proactive_interface_discards_output_packets +  '</td>' +
+								'<td>' + v.proactive_memory_free +  '</td>' +
+								'<td>' + v.proactive_dead_modem +  '</td>' +							
+							'</tr>');
+					});					
+				},
+				divContainers : [ $("#chartGruposError") ] ,
+				divElements : [ $("#chartGruposErrorG") ]
+			});
 			
 			/* get Nodes Op flow */
 			cnocFramework.invokeMashup({invokeUrl : endpoint.getListNodesIpFlow,
@@ -60,7 +116,8 @@ var drawElementsGral = {
 				cnocConnector.service16,
 				{
 					"network_code" : cnocConnector.codeNetGlobal,
-					"topID" : "ifInUtil"
+					"topID" : "ifInUtil",
+					"isGroup" : cnocConnector.codeNetGlobal.indexOf('(')>=0 ? "true" : null
 				},
 				drawElementsGral.topGridMain,
 				"topInUtilization",
@@ -70,7 +127,8 @@ var drawElementsGral = {
 				cnocConnector.service16,
 				{
 					"network_code" : cnocConnector.codeNetGlobal,
-					"topID" : "ifOutUtil"
+					"topID" : "ifOutUtil",
+					"isGroup" : cnocConnector.codeNetGlobal.indexOf('(')>=0 ? "true" : null
 				},
 				drawElementsGral.topGridMain,
 				"topOutUtilization",
@@ -79,9 +137,7 @@ var drawElementsGral = {
 		
 		},
 		getListNodesIpFlow: function(datos, divContainers, divElements){
-			console.log("datos opflow");
-			console.log(datos);
-			
+
 			jQuery(divContainers[0].selector).empty();
 			var tableT = "";
 			try {
@@ -260,7 +316,7 @@ var drawElementsGral = {
 						divElements[3].text(drawElementsGral.unreachableNodes.length);
 						
 						// Unmask all div containers 
-						cnocFramework.unmask(divContainers);
+						//cnocFramework.unmask(divContainers);
 						
 						/*** Draw node list ***/
 						drawElementsGral.listNodes('complete');
@@ -340,7 +396,7 @@ var drawElementsGral = {
 												
 											});
 											
-											if(stopMask == 1) {										
+											if(stopMask == 1) {
 												
 												//Unmask all div containers 
 												cnocFramework.unmask(divContainers);
@@ -557,8 +613,10 @@ var drawElementsGral = {
 				nodeList = nodeList.concat(drawElementsGral.reachableNodes);
 			
 			} else if (status === 'degraded') { // Draw degraded node list
-//				nodeList = nodeList.concat(drawElementsGral.degradedNodes);
-				drawElementsGral.getNodesByStatus(status, cnocConnector.codeNetGlobal);
+				//nodeList = nodeList.concat(drawElementsGral.degradedNodes);
+				//drawElementsGral.getNodesByStatus(status, cnocConnector.codeNetGlobal);
+				drawElementsGral.getListNodesDegraded("");
+				//cnocConnector.invokeMashup(cnocConnector.service14, {"codenet" : cnocConnector.codeNetGlobal,"group":"","status":status},drawElementsGral.drawListNodesV1, "listNodes", "listNodesG");
 			
 			} else if (status === 'unreachable') { // Draw unreachable node list
 				nodeList = nodeList.concat(drawElementsGral.unreachableNodes);
@@ -567,35 +625,64 @@ var drawElementsGral = {
 			drawElementsGral.drawListNodes(nodeList, status, 'listNodes', 'listNodesG');
 			
 		
-		}, drawListNodesDegraded: function (datos, container, divTable) {
-			jQuery("#" + container).empty();	
-			var tableT = "";
+		},getListNodesDegraded: function(group){
 			
-			try {
-				$.each(datos, function(k,v) {
-					tableT +=
-						"<tr class='warning'>" +
-							"<td><a href='#nodeResource'>"+v.name.toString()+"</a></td>" +
-							"<td><a href='#nodeResource'>"+v.event.toString()+"</a></td>" +
-							"<td><a href='#nodeResource'>"+v.value.toString()+"</a></td>" +
-							"<td><a href='#nodeResource'>"+v.element.toString()+"</a></td>" +						
-							"<td><a href='#nodeResource'>"+v.updated.toString()+"</a></td>" +
-						"</tr>";
-				});
+			/*** Invoke NMIS Nodes by Status ***/
+			cnocFramework.invokeMashup({
+				invokeUrl : endpoint.getDegradedNodesList,
+				params : {
+					"networkCode" : cnocConnector.codeNetGlobal,
+					"group" : group
+				},									
+				//callback : drawElementsGral.drawListNodesDegraded,
+				callback : function(datos, container, divtable){
 				
-			} catch (err) {
-				console.log(err);
-			};		
+					jQuery("#listNodes").empty();	
+					var tableT = "";	
+					
+					try {
+						if (datos.records.record.length > 1) {
+							for ( var i = 0; i < datos.records.record.length; i++) {
+								
+								tableT +=
+									"<tr class='warning'>" +
+										"<td><a href='#nodeResource'>"+datos.records.record[i].name.toString()+"</a></td>" +
+										"<td><a href='#nodeResource'>"+datos.records.record[i].event.toString()+"</a></td>" +
+										"<td><a href='#nodeResource'>"+datos.records.record[i].value_column.toString()+"</a></td>" +
+										"<td><a href='#nodeResource'>"+datos.records.record[i].element.toString()+"</a></td>" +						
+										"<td><a href='#nodeResource'>"+datos.records.record[i].updated.toString()+"</a></td>" +
+									"</tr>";
+							}
+						} else {
+							tableT +=
+								"<tr class='warning'>" +
+									"<td><a href='#nodeResource'>"+datos.records.record.name.toString()+"</a></td>" +
+									"<td><a href='#nodeResource'>"+datos.records.record.event.toString()+"</a></td>" +
+									"<td><a href='#nodeResource'>"+datos.records.record.value_column.toString()+"</a></td>" +
+									"<td><a href='#nodeResource'>"+datos.records.record.element.toString()+"</a></td>" +						
+									"<td><a href='#nodeResource'>"+datos.records.record.updated.toString()+"</a></td>" +
+								"</tr>";
+						}
+						
+				
+				} catch (err) {
+					console.log(err);
+				};		
 			
-			var rowsHeaders = [
-				{ "sTitle" : "Node Name" },
-				{ "sTitle" : "Event" },
-				{ "sTitle" : "Value" },
-				{ "sTitle" : "Element" },
-				{ "sTitle" : "Updated" }
-			];
+				var rowsHeaders = [
+					{ "sTitle" : "Node Name" },
+					{ "sTitle" : "Event" },
+					{ "sTitle" : "Value" },
+					{ "sTitle" : "Element" },
+					{ "sTitle" : "Updated" }
+				];
+				
+				cnocConnector.drawGrid("listNodes", "listNodesG", tableT, rowsHeaders, false);
+					},
+					divContainers : [ $('#listNodes') ],
+					divElements : [ $('#listNodesG') ]
+				});
 			
-			cnocConnector.drawGrid(container, divTable, tableT, rowsHeaders, false);
 			
 		}, selectCustom : function(datos, selector, opt) {
 
@@ -614,22 +701,276 @@ var drawElementsGral = {
 			
 			var panelText = cnocConnector.drawPanel(rowsData, container, divPanel);
 			
-		},mapaGeneral:function(codenet, typeData, flgNacional){
+		},mapaGeneral:function(codenet, typeData, flgNacional, isGroup){
 			$( "#mapGral").mask("Waiting...");
 			var states = [];
-
+			
 			$.ajax({
 				type : 'GET',
 				dataType : 'jsonp',
 				url: cnocConnector.service20,
-				data: {network_code:codenet, type:typeData},
+				data: {network_code:codenet, type:typeData, isGroup:isGroup},
 				error : function(jqXHR, textStatus, errorThrown) {
 					console.log("error");
 					console.log(jqXHR);
 					$( "#mapGral").unmask();
 				},
-				success : function(response) {					
+				success : function(response) {	
+
 					var tmp = "";
+					if(response.results){
+						tmp = response.results.international.toString();
+					}else{
+						tmp = response.international.toString();
+					}					
+					
+					try{
+						if(tmp === "false" || flgNacional === true) {
+							$.each( response, function( key, val ) {
+								$.each( val, function( key, val ) {
+
+									var reachableT = 0;
+									var degradedT = 0;
+									var unreachableT = 0;
+									var color ="#22FF00";
+
+									$.each( val, function( key, val ) {
+
+										if(key.toString() === "reachable"){
+											reachableT = val;
+										}
+										
+										if(key.toString() === "degraded"){
+											degradedT = val;
+										}
+										
+										if(key.toString() === "unreachable"){
+											unreachableT = val;
+										}
+										
+										var totalN = parseInt(unreachableT) + parseInt(degradedT) + parseInt(reachableT);
+										
+										if(parseInt(unreachableT) >= 1){
+											color = "#FF1600";
+										}else if(parseInt(degradedT) >= 1){
+											color = "#FFE200";
+										}else {
+											color ="#22FF00";
+										}									
+									});
+
+									var data = {
+										"nameState" : key, 
+										"tooltip": "<b>"+key+" <br> Normal: "+reachableT+" <br> Warning: "+degradedT+"<br> Critical: "+unreachableT,
+										"color" : color,
+										"hc-key" : drawElementsGral.statesMX[key]
+									};
+
+									states.push(data);
+								});								
+							});
+							
+							// Initiate the chart
+						    $('#mapGral').highcharts('Map', {
+
+							    chart: {
+						                backgroundColor: {
+						                    linearGradient: { x1: 0, y1: 0, x2: 0, y2: 1 },
+					                        stops: [
+						                            [0, '#cddee4'],
+						                            [1, '#caf1f9']
+						                        ]
+						                    }
+					            },
+					            title:{
+					            	text : ""
+					            },
+						        subtitle : {
+						            //text : 'Source map: <a href="https://code.highcharts.com/mapdata/countries/mx/mx-all.js">Mexico</a>'
+						        },
+
+						        mapNavigation: {
+						            enabled: true,
+						            buttonOptions: {
+						                verticalAlign: 'bottom'
+						            }
+						        },
+						        credits: {
+					                enabled: false
+					            },
+						        colorAxis: {
+						            min: 0
+						        },
+						        legend: {
+						            enabled: false
+						        },
+						        series : [{
+						            data : states,
+						            //mapData: Highcharts.maps['countries/mx/mx-all'],
+						            mapData: mexico, 
+						            joinBy: 'hc-key',
+						            name: 'Node Status',
+						            states: {
+						                hover: {
+						                    color: '#BADA55'
+						                }
+						            },
+						            dataLabels: {
+						                enabled: true,
+						                format: '{point.nameState}'
+						                //format: '{point.title}'
+						                
+						            },
+						            tooltip: {
+					                    pointFormat: '{point.tooltip}'
+					                }
+						        }]
+						    });
+							
+						}else if(tmp === "true") {
+							var records = [];
+							$.each( response, function( key, val ) {																
+								$.each( val, function( key, val ) {
+									
+									var reachableT = 0;
+									var degradedT = 0;
+									var unreachableT = 0;
+									var color ="#22FF00";
+									
+									$.each( val, function( key, val ) {
+
+										if(key.toString() === "reachable"){
+											reachableT = val;
+										}
+										
+										if(key.toString() === "degraded"){
+											degradedT = val;
+										}
+										
+										if(key.toString() === "unreachable"){
+											unreachableT = val;
+										}
+									});
+									
+									var totalN = parseInt(unreachableT) + parseInt(degradedT) + parseInt(reachableT);
+									
+									if(parseInt(unreachableT)> (totalN * .02)){
+										color = "#FF1600";
+									}else if(parseInt(degradedT)> (totalN * .05)){
+										color = "#FFE200";
+									}else {
+										color ="#22FF00";
+									}
+									records.push({country:key, conteo: "Normal: "+reachableT+" <br> Warning: "+degradedT+"<br> Critical: "+unreachableT, color:color});
+									
+								});	
+	
+							});
+							
+							var mapOptions = {
+									zoom: 2,
+									center: new google.maps.LatLng(21.8833, -102.3),
+									mapTypeId: google.maps.MapTypeId.TERRAIN, 
+									infoWindow: null,
+									styles: stylesMap
+								};
+							var mapaNacional;
+							map = new google.maps.Map(document.getElementById('mapGral'), mapOptions);
+							
+							infoWindow = new google.maps.InfoWindow({
+							        content: "Cargando . . ."
+							});
+							
+							
+							var countries = {};
+
+						    var totalServicios = 0;
+
+						    
+						    for (var i = 0; i < records.length; i++) {
+							      var record = records[i];
+
+							      countries[record['country']] = record;
+							      totalServicios += parseFloat(record['conteo']);
+							    }
+
+						    var rows = polygons.mundial.records.record;
+
+						    jQuery.each(rows, function(index, item) {
+						      var poly = [];
+
+						      if (item[0] === "Antarctica")
+						    	  return true;				        
+
+						      if (item[1].type == 'GeometryCollection') {
+
+						        var geos = item[1].geometries;
+						        jQuery.each(geos, function(g, k) {
+						          poly.push(drawElementsGral.constructNewCoordinates(k));
+						        });
+
+						      } else {
+
+						        poly = drawElementsGral.constructNewCoordinates(item[1].geometry);
+
+						      }
+						      
+						      var color = countries[item[0].toUpperCase()] == null ? '#7B7B7B' : '#0000FF';
+						      try{
+						    	  color = countries[item[0].toUpperCase()].color;
+						      }catch(e){
+						      }
+						      
+						      mapaNacional = new google.maps.Polygon({
+						        paths : poly,
+						        strokeColor : '#FFFFFF',
+						        strokeOpacity : 1,
+						        strokeWeight : 1,
+						        fillColor : color,
+						        fillOpacity : .5,
+						        info : countries[item[0].toUpperCase()]
+						      });
+						      
+						      mapaNacional.setMap(map);
+
+						      if (countries[item[0].toUpperCase()] != null) {
+						    	  
+						    	// Add a listener for the click event.
+						            google.maps.event.addListener(mapaNacional, 'mouseover', function(event){
+						            	var info = this.info;
+						                var total = this.totalIncidents;
+						                var contentString = '<div class="tooltipMap"><b>Country:' + info['country'] + '</b><br>' + info['conteo'] + '<br></div>';
+						                // Replace the info window's content and position.
+						                infoWindow.setContent(contentString);
+						                infoWindow.setPosition(event.latLng);
+						                infoWindow.open(map);
+						            });
+						            infoWindow = new google.maps.InfoWindow();
+						            
+						            if(codenet.indexOf('N')>=0){
+										if (codenet.indexOf('(')>=0) {
+											google.maps.event.addListener(mapaNacional, 'click', function(){
+								            	drawElementsGral.mapaGeneral(codenet,"NACIONAL", true, "true");
+								            });
+										} else {
+											google.maps.event.addListener(mapaNacional, 'click', function(){
+								            	drawElementsGral.mapaGeneral(codenet,"NACIONAL", true);
+								            });
+										}	
+									}
+						      	}
+						    });
+							
+						    $( "#mapGral").unmask();
+						    
+						}
+					}catch(e){
+						console.log(e);
+					}
+					
+					
+					
+					/*var tmp = "";
 					if(response.results){
 						tmp = response.results.international.toString();
 					}else{
@@ -878,8 +1219,7 @@ var drawElementsGral = {
 						}
 					}catch(e){
 						console.log(e);
-						console.log("fallo");
-					}
+					}*/
 					$( "#mapGral").unmask();
 				}
 			});
@@ -1098,11 +1438,13 @@ var drawElementsGral = {
 							click : function(event) {
 								if (event.point.series.name === "Normal") {
 									status = "reachable";
-								} else if (event.point.series.name === "Warning") {
+								} else if (event.point.series.name === "Warning") {									
 									status = "degraded";
+									drawElementsGral.getListNodesDegraded("and n.group_column = '"+event.point.category+"'");
 								} else if (event.point.series.name === "Critical") {
 									status = "unreachable";
-								}
+								}								
+								//cnocConnector.invokeMashup(cnocConnector.service14, {"codenet" : cnocConnector.codeNetGlobal,"group":event.point.category,"status":status},drawElementsGral.drawListNodesV1, "listNodes", "listNodesG");
 							}
 						}
 					},
@@ -1159,6 +1501,38 @@ var drawElementsGral = {
 		
 		cnocConnector.drawGrid(container, divTable, tableT, rowsHeaders, false);
 		
+	},drawListNodesV1: function (datos, container, divTable){
+		jQuery("#" + container).empty();	
+		var tableT = "";
+		try {
+			if (datos.records.record.length > 1) {
+				for ( var i = 0; i < datos.records.record.length; i++) {
+					if(datos.records.record[i].status_value.toString()==="degraded"){
+						tableT += "<tr class='warning'><td>"+datos.records.record[i].name.toString()+"</td></tr>";
+					}else if(datos.records.record[i].status_value.toString()==="reachable"){
+						tableT += "<tr class='success'><td>"+datos.records.record[i].name.toString()+"</td></tr>";
+					}else if(datos.records.record[i].status_value.toString()==="unreachable"){
+						tableT += "<tr class='danger'><td>"+datos.records.record[i].name.toString()+"</td></tr>";
+					};					
+				};
+			} else {
+				if(datos.records.record.status_value.toString()==="degraded"){
+					tableT += "<tr class='warning'><td>"+datos.records.record.name.toString()+"</td></tr>";
+				}else if(datos.records.record.status_value.toString()==="reachable"){
+					tableT += "<tr class='success'><td>"+datos.records.record.name.toString()+"</td></tr>";
+				}else if(datos.records.record.status_value.toString()==="unreachable"){
+					tableT += "<tr class='danger'><td>"+datos.records.record.name.toString()+"</td></tr>";
+				}
+			}
+		} catch (err) {	};
+		/*GENERA ARRAY DE ENCABEZADOS DE GRAFICA*/
+		try {
+			var rowsHeaders = [{
+				"sTitle" : "Node Name"
+			}];
+		} catch (err) {	};
+		
+		var grid = cnocConnector.drawGrid(container, divTable, tableT, rowsHeaders, false);		
 	},countTotal: function(datos, container, divPanel){
 		/*GENERA ARRAY DE DATOS A GRAFICAR*/
 		var rowsData = new Array();
@@ -1340,9 +1714,6 @@ var drawElementsGral = {
 					cnocConnector.invokeMashup(cnocConnector.service24, {"node" : node, "codenet" : cnocConnector.codeNetGlobal},drawElementsGral.drawGetModel, "listNodeDetail", "listNodeDetailG");
 					cnocConnector.invokeMashup(cnocConnector.service22, {"hostname" : node,"code_net":cnocConnector.codeNetGlobal},drawElementsGral.countTotal, "relatedIncidentsC", "relatedIncidentsCG");
 					cnocConnector.invokeMashup(cnocConnector.service23, {"hostname" : node,"code_net":cnocConnector.codeNetGlobal},drawElementsGral.countTotal, "relatedChangesC", "relatedChangesCG");
-					
-					console.log(node);
-					console.log(drawElementsGral.intTops);
 					
 					cnocFramework.invokeMashup({invokeUrl : endpoint.getIpOpflow,
 						params : {
@@ -1798,12 +2169,9 @@ var drawElementsGral = {
 			time.empty();
 			time.append(
 					'<option value="0">Do not clear IP Accounting</option>' +
-					'<option value="300000">Clear and wait 5 minutes</option>' +
 					'<option value="600000">Clear and wait 10 minutes</option>' +
 					'<option value="900000">Clear and wait 15 minutes</option>' +
-					'<option value="1200000">Clear and wait 20 minutes</option>' +
-					'<option value="1800000">Clear and wait 30 minutes</option>' +
-					'<option value="3600000">Clear and wait 60 minutes</option>'	
+					'<option value="1200000">Clear and wait 20 minutes</option>'	
 			);
 		}
 		
@@ -1885,6 +2253,27 @@ var drawElementsGral = {
 						for(var x=0; x<data.length; x++){
 							if(data[x].name==="cbqos-in"){
 								drawElementsPerformance.qosIn = true;
+							}else if(data[x].name==="bgpPeer"){
+								cnocConnector.invokeMashup(cnocConnector.service1, {
+        							"endpoint" : "http://"+nmis+"/omk/opCharts/nodes/"+name+"/resources/bgpPeer/indicies",
+        							"ip":nmis
+        						},function(data){		
+
+        							drawElementsPerformance.idResourceInterfaz = data.results.datum.value;
+        							
+        							var tree = "<ul><li><span class='treeNode badge badge-success'><i class='icon-minus-sign'></i> BGPPeer </span><ul>";
+        							tree += "<li id='"+data.results.datum.value+"' class='bgpPeer'><span class='treeNode'><i class='icon-minus-sign'><a title='"+data.results.datum.name+"' href='#nodeChart'>"+data.results.datum.tokens[0]+"--"+data.results.datum.tokens[1]+"...</a></i></span></li>";
+        							tree += "</ul></li>";
+        							tree += "<ul>";
+
+        							$("#treeNodeDetailInterfaz").append(tree);
+        							
+        							$( ".bgpPeer" ).click(function() {
+        								drawElementsPerformance.idResourceInterfaz = $(this).attr( 'id' );
+        								drawElementsPerformance.drawBgp();
+        							});
+        							
+        						}, null, null);
 							}
 						}
 					}, null, null);
@@ -1975,5 +2364,5 @@ var drawElementsGral = {
 		  var sec = a.getSeconds();
 		  var time = date + ' ' + month + ' ' + year + ' ' + hour + ':' + min + ':' + sec ;
 		  return time;
-		}
+	}
 };

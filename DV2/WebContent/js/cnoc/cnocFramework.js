@@ -30,31 +30,45 @@ var cnocFramework = {
 				dataType : 'json',
 				url : request.invokeUrl,
 				data : request.params,
-				error : function(jqXHR, textStatus, errorThrown) {
-					console.log(jqXHR);
-					console.log(textStatus);
-					console.log(errorThrown);
-					request.callback(null, request.divContainers, request.divElements);
-				},
 				success : function(response, divContainers, divElements) {
 					try {
 						var ce = response.PrestoResponse.PrestoError.ErrorDetails.code;
 						if (ce == 401) {
 							alert("Insuficientes Prvilegios");
-							window.location = endpoint.main;
+							window.location = endpoint.path;
 						}
 					} catch (err) {
 						/*** Invoke function callback ***/
-						request.callback(response, request.divContainers, request.divElements);						
+						request.callback(response, request.divContainers, request.divElements);
+						/*** Unmask all div containers ***/
+						$.each(request.divContainers, function(k,v) {
+							$( v ).unmask();
+						});
+					}
+				},
+				error : function(jqXHR, textStatus, errorThrown) {
+					console.log(jqXHR);
+					console.log(textStatus);
+					console.log(errorThrown);										
+				},
+				statusCode: {
+					404: function() {
+						alert("Insuficientes Prvilegios");
+						window.location = endpoint.path;
+					},
+					401: function() {
+						alert("Insuficientes Prvilegios");
+						window.location = endpoint.path;
 					}
 				}
 			});
 			
 		} catch (error) {
 			alert(error);
-			console.log(error);
 			/*** Unmask all div containers ***/
-			cnocFramework.unmask(divContainers);
+			$.each(request.divContainers, function(k,v) {
+				$( v ).unmask();
+			});
 		}
 	},
 	
@@ -65,24 +79,36 @@ var cnocFramework = {
 	 * @param : columns
 	 * @param : data
 	 */
-	createTable : function(container, idTable, columns, data) {		
+	createTable : function(container, idTable, tableOptions, clickEvent) {
+		
+		var id = idTable.substring(1);
+		
 		container.empty();
-		container.append('<table id="' + idTable.substring(1) + '" class="table table-bordered table-striped"></table>');
-		$(idTable).DataTable({
-        	"columns": columns,
-			"scrollX": true,
-			"data" : data
-        });
+		container.append('<table id="' + id + '" class="table table-bordered table-striped"></table>');
+		var table = $(idTable).DataTable(tableOptions);
+		
+		if(clickEvent != null) {
+			$('#' + id + ' tbody').on('click', 'tr', function () {
+				var data = table.row( this ).data();
+				clickEvent(data);
+			});
+		}
+		
+		return table;
 	},
 	
 	/*
-	 * Unmask all div containers
-	 * @param : divContainers
+	 * Export Data
+	 * @param : options
+	 * @param : fileName
 	 */
-	unmask : function(divContainers) {
-		$.each(divContainers, function(k,v) {
-			$( v ).unmask();
+	exportData : function (options, fileName) {
+	
+		var workbook = new kendo.ooxml.Workbook(options);
+	
+		kendo.saveAs({
+			dataURI: workbook.toDataURL(),
+			fileName: fileName
 		});
 	}
-	
 };
