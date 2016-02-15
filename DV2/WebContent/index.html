@@ -208,18 +208,18 @@
 																		returnUrl = "/dashboardPyrs/main.jsp";
 																	else if (codenets === "N000362")
 																		returnUrl = "/dashboardSantander/main.jsp";
-																	else if (response.response.records.record.nmis_db === "10.237.7.202" || response.response.records.record.nmis_db === "10.237.7.203")
+																	else if (response.response.records.record.nmis_db === "10.237.7.202" || response.response.records.record.nmis_db === "10.237.7.203" || response.response.records.record.nmis_db === "10.237.7.205" || response.response.records.record.nmis_db ==="10.237.7.204")
 																		returnUrl = "/dashboardV2/main.jsp"
 																	else if (ou === "PEXA-CUSTOM")
 																		returnUrl = "/dashboardPEX/main.jsp";
 																	else if (module.indexOf("gen=true") > -1)
 																		returnUrl = "/dashboard/main.jsp";
 																	else
-																		returnUrl = "/dashboardV2/main.jsp";
+																		returnUrl = "/dashboard/main.jsp";
 																
 																} catch (err) {
 																	console.log(err);
-																	returnUrl = "/dashboardV2/main.jsp";
+																	returnUrl = "/dashboard/main.jsp";
 																}
 																
 																window.location.href = returnUrl;
@@ -283,7 +283,7 @@
 				    <p class="clearfix">
 				        <input type="submit" name="send" value="Sign in" id="send" class="send">
 				    </p>       
-				</form>​
+				</form>���������
 			</section>			
 	</div>-->
 
